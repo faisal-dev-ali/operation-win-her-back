@@ -58,8 +58,11 @@ export default function Final({ onRestart }: Props) {
 
     if (!video) return;
 
-    // Video is visual only.
-    // Background music is the only audio source.
+    /*
+     * Video is visual only.
+     * Background music is the only audio source.
+     */
+
     video.muted = true;
     video.volume = 0;
 
@@ -68,7 +71,10 @@ export default function Final({ onRestart }: Props) {
     try {
       await video.play();
 
-      // Force video silence after playback starts.
+      /*
+       * Force video silence after playback begins.
+       */
+
       video.muted = true;
       video.volume = 0;
 
@@ -438,11 +444,19 @@ export default function Final({ onRestart }: Props) {
 
                   <video
                     ref={videoRef}
-                    src="/videos/apology-silent.mp4"
+                    src="/videos/apology.mp4"
                     muted
                     playsInline
                     preload="metadata"
                     controls={videoStarted}
+                    onLoadedMetadata={() => {
+                      const video = videoRef.current;
+
+                      if (!video) return;
+
+                      video.muted = true;
+                      video.volume = 0;
+                    }}
                     onPlay={() => {
                       const video = videoRef.current;
 
@@ -473,19 +487,18 @@ export default function Final({ onRestart }: Props) {
                       restoreMusic(0.45, 1600);
                     }}
                     className="
-    block
-    h-auto
-    max-h-[75vh]
-    w-full
-    bg-black
-  "
+                      block
+                      h-auto
+                      max-h-[75vh]
+                      w-full
+                      bg-black
+                    "
                   />
 
                   {/* =================================================
-                      PLAY SCREEN
+                      PLAY BUTTON
                   ================================================== */}
 
-                  {/* 
                   {!videoStarted && (
                     <button
                       type="button"
@@ -498,9 +511,9 @@ export default function Final({ onRestart }: Props) {
                         cursor-pointer
                         items-center
                         justify-center
-                        bg-black/25
+                        bg-black/20
                         transition-colors
-                        hover:bg-black/15
+                        hover:bg-black/10
                       "
                     >
                       <motion.div
@@ -547,7 +560,6 @@ export default function Final({ onRestart }: Props) {
                       </motion.div>
                     </button>
                   )}
-                  */}
 
                   {/* Play hint */}
 
