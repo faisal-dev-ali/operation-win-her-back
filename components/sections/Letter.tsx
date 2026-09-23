@@ -859,8 +859,8 @@ export default function Letter({ onNext }: Props) {
         </div>
 
         {/* =====================================================
-            AFTER LETTER
-        ===================================================== */}
+    AFTER LETTER
+===================================================== */}
 
         <AnimatePresence>
           {typingFinished && (
@@ -878,22 +878,22 @@ export default function Letter({ onNext }: Props) {
                 delay: 0.35,
               }}
               className="
-                relative
-                z-10
-                mt-12
-                text-center
-              "
+        relative
+        z-10
+        mt-12
+        text-center
+      "
             >
               {/* Divider */}
               <div
                 className="
-                  mx-auto
-                  mb-6
-                  flex
-                  items-center
-                  justify-center
-                  gap-3
-                "
+          mx-auto
+          mb-7
+          flex
+          items-center
+          justify-center
+          gap-3
+        "
               >
                 <span className="h-px w-12 bg-[#e2a2b5]/15" />
 
@@ -917,26 +917,123 @@ export default function Letter({ onNext }: Props) {
                 <span className="h-px w-12 bg-[#e2a2b5]/15" />
               </div>
 
+              {/* =================================================
+          P.S.
+      ================================================= */}
+
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 12,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.25,
+                }}
+                className="
+          mx-auto
+          max-w-xl
+          rounded-3xl
+          border
+          border-[#e2a2b5]/10
+          bg-white/[0.025]
+          px-6
+          py-6
+          shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+        "
+              >
+                <p
+                  className="
+            text-[10px]
+            uppercase
+            tracking-[0.35em]
+            text-[#c87591]/75
+          "
+                >
+                  P.S.
+                </p>
+
+                <p
+                  className="
+            romantic-title
+            mt-3
+            text-xl
+            leading-relaxed
+            text-[#f2dfe3]
+            sm:text-2xl
+          "
+                >
+                  I still think you looked beautiful.
+                </p>
+
+                <p
+                  className="
+            mt-2
+            text-sm
+            leading-7
+            text-[#b8a5ad]
+            sm:text-base
+          "
+                >
+                  I just wish I had said it the right way.
+                </p>
+
+                <motion.div
+                  animate={{
+                    scale: [1, 1.12, 1],
+                    opacity: [0.55, 0.9, 0.55],
+                  }}
+                  transition={{
+                    duration: 2.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="mt-4 flex justify-center"
+                >
+                  <Heart
+                    size={16}
+                    strokeWidth={1.2}
+                    className="
+              fill-[#d889a2]
+              text-[#d889a2]
+              heart-glow
+            "
+                  />
+                </motion.div>
+              </motion.div>
+
+              {/* =================================================
+          SINCERE MESSAGE
+      ================================================= */}
+
               <p
                 className="
-                  text-sm
-                  leading-7
-                  text-[#b8a5ad]
-                "
+          mt-8
+          text-sm
+          leading-7
+          text-[#b8a5ad]
+        "
               >
                 I hope you can feel
                 <br />
                 how sincerely I mean this.
               </p>
 
-              {/* CTA */}
+              {/* =================================================
+          CTA
+      ================================================= */}
+
               <div
                 className="
-                  mx-auto
-                  mt-7
-                  w-full
-                  max-w-sm
-                "
+          mx-auto
+          mt-7
+          w-full
+          max-w-sm
+        "
               >
                 <motion.div
                   animate={{
@@ -972,22 +1069,22 @@ export default function Letter({ onNext }: Props) {
                   ease: "easeInOut",
                 }}
                 className="
-                  mt-5
-                  flex
-                  items-center
-                  justify-center
-                  gap-2
-                "
+          mt-5
+          flex
+          items-center
+          justify-center
+          gap-2
+        "
               >
                 <Sparkles size={9} className="text-[#e2a2b5]/35" />
 
                 <p
                   className="
-                    text-[9px]
-                    uppercase
-                    tracking-[0.3em]
-                    text-[#b8a5ad]/45
-                  "
+            text-[9px]
+            uppercase
+            tracking-[0.3em]
+            text-[#b8a5ad]/45
+          "
                 >
                   One more little part of this story
                 </p>
