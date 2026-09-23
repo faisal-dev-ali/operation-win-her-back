@@ -26,20 +26,54 @@ type Stage =
   | "promise"
   | "final";
 
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "auto",
+  });
+}
+
 function Story() {
   const [stage, setStage] = useState<Stage>("hero");
+
   const { startMusic } = useMusic();
 
   const nextStage = (next: Stage) => {
-    // Start music from the user's interaction.
-    startMusic();
+    /*
+     * Start music from the same user interaction
+     * that moves to the next chapter.
+     *
+     * DO NOT await this.
+     *
+     * If the browser rejects audio playback,
+     * the story should still continue normally.
+     */
+    void startMusic();
+
+    /*
+     * Always start the next chapter from the top.
+     */
+    scrollToTop();
 
     setStage(next);
   };
 
+  const restartStory = () => {
+    /*
+     * Try to resume music without blocking
+     * the restart transition.
+     */
+    void startMusic();
+
+    scrollToTop();
+
+    setStage("hero");
+  };
+
   return (
     <>
-      {/* Subtle floating hearts wherever she taps */}
+      {/* Subtle heart particles wherever she touches */}
       <HeartTouch />
 
       <main className="min-h-screen overflow-x-hidden">
@@ -92,14 +126,7 @@ function Story() {
               <Promise onNext={() => nextStage("final")} />
             )}
 
-            {stage === "final" && (
-              <Final
-                onRestart={() => {
-                  startMusic();
-                  setStage("hero");
-                }}
-              />
-            )}
+            {stage === "final" && <Final onRestart={restartStory} />}
           </motion.div>
         </AnimatePresence>
       </main>

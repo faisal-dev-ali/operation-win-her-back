@@ -2,15 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Heart,
-  Sparkles,
-  Stars,
-  Flower2,
-  Play,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { Heart, Sparkles, Stars, Flower2, Play } from "lucide-react";
 
 import Section from "../ui/Section";
 import Button from "../Button";
@@ -56,7 +48,6 @@ export default function Final({ onRestart }: Props) {
 
   const [videoStarted, setVideoStarted] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
 
   /* =========================================================
      START VIDEO
@@ -67,46 +58,26 @@ export default function Final({ onRestart }: Props) {
 
     if (!video) return;
 
-    /*
-      The apology video is the emotional climax.
-      Lower the background music before the video begins.
-    */
+    // Video is visual only.
+    // Background music is the only audio source.
+    video.muted = true;
+    video.volume = 0;
+
     fadeMusic(0.025, 1000);
 
     try {
-      video.muted = false;
-      setIsMuted(false);
-
       await video.play();
 
-      setVideoStarted(true);
-    } catch {
-      /*
-        Some mobile browsers block autoplay with sound.
-        If that happens, retry muted.
-      */
+      // Force video silence after playback starts.
       video.muted = true;
-      setIsMuted(true);
-
-      await video.play();
+      video.volume = 0;
 
       setVideoStarted(true);
+    } catch (error) {
+      console.error("Video could not be started:", error);
+
+      restoreMusic(0.45, 1000);
     }
-  };
-
-  /* =========================================================
-     MUTE / UNMUTE VIDEO
-  ========================================================= */
-
-  const toggleMute = () => {
-    const video = videoRef.current;
-
-    if (!video) return;
-
-    const nextMuted = !video.muted;
-
-    video.muted = nextMuted;
-    setIsMuted(nextMuted);
   };
 
   return (
@@ -118,6 +89,7 @@ export default function Final({ onRestart }: Props) {
 
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {/* Main rose glow */}
+
           <motion.div
             animate={{
               opacity: [0.22, 0.42, 0.22],
@@ -152,6 +124,7 @@ export default function Final({ onRestart }: Props) {
           />
 
           {/* Deep wine glow */}
+
           <div
             className="
               absolute
@@ -166,6 +139,7 @@ export default function Final({ onRestart }: Props) {
           />
 
           {/* Champagne glow */}
+
           <div
             className="
               absolute
@@ -180,6 +154,7 @@ export default function Final({ onRestart }: Props) {
           />
 
           {/* Stars */}
+
           {stars.map((star) => (
             <motion.span
               key={star.id}
@@ -204,6 +179,7 @@ export default function Final({ onRestart }: Props) {
           ))}
 
           {/* Floating petals */}
+
           {petals.map((petal) => (
             <motion.span
               key={petal.id}
@@ -429,6 +405,7 @@ export default function Final({ onRestart }: Props) {
           >
             <div className="relative">
               {/* Outer glow */}
+
               <div
                 className="
                   pointer-events-none
@@ -441,6 +418,7 @@ export default function Final({ onRestart }: Props) {
               />
 
               {/* Video frame */}
+
               <div
                 className="
                   relative
@@ -460,12 +438,21 @@ export default function Final({ onRestart }: Props) {
 
                   <video
                     ref={videoRef}
-                    src="/videos/apology.mp4"
+                    src="/videos/apology-silent.mp4"
+                    muted
                     playsInline
                     preload="metadata"
                     controls={videoStarted}
                     onPlay={() => {
+                      const video = videoRef.current;
+
+                      if (video) {
+                        video.muted = true;
+                        video.volume = 0;
+                      }
+
                       setVideoStarted(true);
+
                       fadeMusic(0.025, 1000);
                     }}
                     onPause={() => {
@@ -474,22 +461,31 @@ export default function Final({ onRestart }: Props) {
                       }
                     }}
                     onEnded={() => {
+                      const video = videoRef.current;
+
+                      if (video) {
+                        video.muted = true;
+                        video.volume = 0;
+                      }
+
                       setVideoEnded(true);
-                      restoreMusic(0.16, 1600);
+
+                      restoreMusic(0.45, 1600);
                     }}
                     className="
-                      block
-                      h-auto
-                      max-h-[75vh]
-                      w-full
-                      bg-black
-                    "
+    block
+    h-auto
+    max-h-[75vh]
+    w-full
+    bg-black
+  "
                   />
 
                   {/* =================================================
                       PLAY SCREEN
                   ================================================== */}
 
+                  {/* 
                   {!videoStarted && (
                     <button
                       type="button"
@@ -551,8 +547,10 @@ export default function Final({ onRestart }: Props) {
                       </motion.div>
                     </button>
                   )}
+                  */}
 
                   {/* Play hint */}
+
                   {!videoStarted && (
                     <div
                       className="
@@ -578,43 +576,12 @@ export default function Final({ onRestart }: Props) {
                       Tap to hear me out
                     </div>
                   )}
-
-                  {/* =================================================
-                      MUTE BUTTON
-                  ================================================== */}
-
-                  {videoStarted && !videoEnded && (
-                    <button
-                      type="button"
-                      onClick={toggleMute}
-                      aria-label={isMuted ? "Unmute video" : "Mute video"}
-                      className="
-                        absolute
-                        right-3
-                        top-3
-                        z-20
-                        flex
-                        h-9
-                        w-9
-                        items-center
-                        justify-center
-                        rounded-full
-                        border
-                        border-white/15
-                        bg-black/35
-                        text-white/80
-                        backdrop-blur-md
-                        active:scale-95
-                      "
-                    >
-                      {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
 
             {/* Video caption */}
+
             <motion.p
               initial={{
                 opacity: 0,
@@ -811,6 +778,7 @@ export default function Final({ onRestart }: Props) {
                 "
               >
                 {/* Paper light */}
+
                 <motion.div
                   animate={{
                     x: ["-120%", "120%"],
@@ -836,6 +804,7 @@ export default function Final({ onRestart }: Props) {
 
                 <div className="relative">
                   {/* Header */}
+
                   <div className="flex items-center gap-3">
                     <Flower2
                       size={17}
@@ -856,6 +825,7 @@ export default function Final({ onRestart }: Props) {
                   </div>
 
                   {/* Name */}
+
                   <p
                     className="
                       mt-8
@@ -872,6 +842,7 @@ export default function Final({ onRestart }: Props) {
                   </p>
 
                   {/* Letter */}
+
                   <div
                     className="
                       mt-6
@@ -913,6 +884,7 @@ export default function Final({ onRestart }: Props) {
                   </div>
 
                   {/* Divider */}
+
                   <div className="mt-9 flex items-center gap-3">
                     <span className="h-px w-12 bg-[#a9667d]/20" />
 
@@ -926,6 +898,7 @@ export default function Final({ onRestart }: Props) {
                   </div>
 
                   {/* Final sentence */}
+
                   <p
                     className="
                       mt-7
@@ -938,6 +911,7 @@ export default function Final({ onRestart }: Props) {
                   </p>
 
                   {/* Signature */}
+
                   <p
                     className="
                       mt-6
