@@ -1,7 +1,16 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Heart, Sparkles, Stars } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Heart,
+  Sparkles,
+  Stars,
+  Flower2,
+  Play,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
 
 import Section from "../ui/Section";
 import Button from "../Button";
@@ -11,90 +20,195 @@ type Props = {
   onRestart: () => void;
 };
 
+const stars = Array.from({ length: 22 }, (_, index) => ({
+  id: index,
+  left: `${(index * 43) % 100}%`,
+  top: `${(index * 61) % 100}%`,
+  size: 2 + (index % 3),
+  delay: (index % 6) * 0.7,
+}));
+
+const petals = Array.from({ length: 9 }, (_, index) => ({
+  id: index,
+  left: `${5 + ((index * 29) % 90)}%`,
+  delay: index * 1.15,
+  duration: 9 + (index % 4),
+  size: 7 + (index % 4),
+}));
+
 export default function Final({ onRestart }: Props) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const [videoStarted, setVideoStarted] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const startVideo = async () => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    try {
+      video.muted = false;
+      setIsMuted(false);
+
+      await video.play();
+      setVideoStarted(true);
+    } catch {
+      video.muted = true;
+      setIsMuted(true);
+
+      await video.play();
+      setVideoStarted(true);
+    }
+  };
+
+  const toggleMute = () => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    const nextMuted = !video.muted;
+
+    video.muted = nextMuted;
+    setIsMuted(nextMuted);
+  };
+
   return (
     <Section id="final">
       <div className="relative w-full overflow-hidden">
-        {/* ───────────────── AMBIENT GLOW ───────────────── */}
+        {/* =========================================================
+            ATMOSPHERE
+        ========================================================== */}
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            scale: 0.6,
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1.5,
-          }}
-          className="
-            pointer-events-none
-            absolute
-            left-1/2
-            top-1/2
-            h-[22rem]
-            w-[22rem]
-            -translate-x-1/2
-            -translate-y-1/2
-            rounded-full
-            bg-rose-500/[0.08]
-            blur-[110px]
-            sm:h-[30rem]
-            sm:w-[30rem]
-          "
-        />
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <motion.div
+            animate={{
+              opacity: [0.22, 0.42, 0.22],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              opacity: {
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              },
+              scale: {
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              },
+            }}
+            className="
+              absolute
+              left-1/2
+              top-[34%]
+              h-[25rem]
+              w-[25rem]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-[#c87591]/[0.10]
+              blur-[120px]
+              sm:h-[34rem]
+              sm:w-[34rem]
+            "
+          />
 
-        {/* Tiny ambient stars */}
-        <motion.div
-          animate={{
-            opacity: [0.2, 0.6, 0.2],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            pointer-events-none
-            absolute
-            left-[12%]
-            top-[18%]
-            text-rose-300/30
-          "
-        >
-          <Stars size={12} />
-        </motion.div>
+          <div
+            className="
+              absolute
+              -left-40
+              top-[42%]
+              h-80
+              w-80
+              rounded-full
+              bg-[#8f4564]/[0.10]
+              blur-[120px]
+            "
+          />
 
-        <motion.div
-          animate={{
-            opacity: [0.15, 0.5, 0.15],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-          className="
-            pointer-events-none
-            absolute
-            right-[14%]
-            top-[30%]
-            text-rose-300/20
-          "
-        >
-          <Sparkles size={11} />
-        </motion.div>
+          <div
+            className="
+              absolute
+              -right-40
+              top-[16%]
+              h-72
+              w-72
+              rounded-full
+              bg-[#efd7c9]/[0.055]
+              blur-[110px]
+            "
+          />
 
-        <div className="relative z-10 mx-auto max-w-2xl text-center">
-          {/* ───────────────── HEART ───────────────── */}
+          {stars.map((star) => (
+            <motion.span
+              key={star.id}
+              animate={{
+                opacity: [0.06, 0.42, 0.06],
+                scale: [0.7, 1, 0.7],
+              }}
+              transition={{
+                duration: 3 + star.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: star.delay,
+              }}
+              className="absolute rounded-full bg-[#f1dce1]"
+              style={{
+                left: star.left,
+                top: star.top,
+                width: star.size,
+                height: star.size,
+              }}
+            />
+          ))}
+
+          {petals.map((petal) => (
+            <motion.span
+              key={petal.id}
+              initial={{
+                y: "-10vh",
+                rotate: 0,
+                opacity: 0,
+              }}
+              animate={{
+                y: "110vh",
+                rotate: 180,
+                opacity: [0, 0.24, 0.1, 0],
+              }}
+              transition={{
+                duration: petal.duration,
+                repeat: Infinity,
+                ease: "linear",
+                delay: petal.delay,
+              }}
+              className="
+                absolute
+                top-0
+                rounded-[100%_0_100%_0]
+                border
+                border-[#e4a5b8]/20
+                bg-[#d889a2]/[0.045]
+              "
+              style={{
+                left: petal.left,
+                width: petal.size,
+                height: petal.size * 1.45,
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-3xl text-center">
+          {/* =========================================================
+              OPENING HEART
+          ========================================================== */}
 
           <motion.div
             initial={{
               opacity: 0,
-              scale: 0.5,
+              scale: 0.6,
               y: 15,
             }}
             animate={{
@@ -103,39 +217,67 @@ export default function Final({ onRestart }: Props) {
               y: 0,
             }}
             transition={{
-              duration: 0.9,
-              ease: "easeOut",
+              duration: 1,
+              ease: [0.22, 1, 0.36, 1],
             }}
-            className="
-              mx-auto
-              flex
-              h-16
-              w-16
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-rose-400/15
-              bg-rose-400/[0.06]
-              shadow-lg
-              shadow-rose-500/10
-            "
+            className="relative mx-auto h-20 w-20"
           >
             <motion.div
               animate={{
-                scale: [1, 1.1, 1],
+                scale: [1, 1.25, 1],
+                opacity: [0.18, 0.4, 0.18],
               }}
               transition={{
-                duration: 2.4,
+                duration: 3,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
+              className="
+                absolute
+                inset-0
+                rounded-full
+                bg-[#c87591]/[0.13]
+                blur-2xl
+              "
+            />
+
+            <div
+              className="
+                heart-glow
+                relative
+                flex
+                h-20
+                w-20
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-[#e1a1b5]/20
+                bg-[#c87591]/[0.065]
+              "
             >
-              <Heart size={25} className="fill-rose-400 text-rose-400" />
-            </motion.div>
+              <motion.div
+                animate={{
+                  scale: [1, 1.12, 1],
+                }}
+                transition={{
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <Heart
+                  size={28}
+                  strokeWidth={1.4}
+                  className="fill-[#d98fa5] text-[#d98fa5]"
+                />
+              </motion.div>
+            </div>
           </motion.div>
 
-          {/* ───────────────── INTRO ───────────────── */}
+          {/* =========================================================
+              INTRO
+          ========================================================== */}
 
           <motion.p
             initial={{
@@ -154,12 +296,12 @@ export default function Final({ onRestart }: Props) {
               mt-8
               text-[10px]
               uppercase
-              tracking-[0.4em]
-              text-rose-300/70
+              tracking-[0.42em]
+              text-[#dca5b6]/70
               sm:text-xs
             "
           >
-            Just one last thing
+            One last thing
           </motion.p>
 
           <motion.h2
@@ -173,85 +315,61 @@ export default function Final({ onRestart }: Props) {
             }}
             transition={{
               duration: 0.9,
-              delay: 0.3,
-              ease: "easeOut",
+              delay: 0.32,
+              ease: [0.22, 1, 0.36, 1],
             }}
             className="
+              romantic-title
               mt-5
-              text-[2.8rem]
+              text-[2.7rem]
               font-semibold
-              leading-[1.05]
+              leading-[1.04]
               tracking-[-0.055em]
-              text-white
               sm:text-6xl
             "
           >
-            I just want
+            Some things are better
             <br />
-            <span className="text-rose-300">you to know.</span>
+            <span className="romantic-gradient">shown than written.</span>
           </motion.h2>
 
-          {/* ───────────────── MESSAGE ───────────────── */}
-
-          <motion.div
+          <motion.p
             initial={{
               opacity: 0,
-              y: 25,
+              y: 15,
             }}
             animate={{
               opacity: 1,
               y: 0,
             }}
             transition={{
-              duration: 0.8,
+              duration: 0.75,
               delay: 0.5,
             }}
             className="
               mx-auto
-              mt-9
-              max-w-xl
-              space-y-6
+              mt-6
+              max-w-md
               text-sm
-              leading-8
-              text-zinc-400
+              leading-7
+              text-[#b9a8ae]
               sm:text-base
-              sm:leading-9
             "
           >
-            <p>I know I can&apos;t change the moment that already happened.</p>
+            So this time, no long paragraph.
+            <br />
+            Just me... saying sorry.
+          </motion.p>
 
-            <p>
-              I can&apos;t take those words back or pretend they never came out
-              of my mouth.
-            </p>
-
-            <p className="text-zinc-300">
-              But I can be honest about one thing...
-            </p>
-
-            <p
-              className="
-                text-lg
-                font-medium
-                leading-8
-                text-zinc-100
-                sm:text-xl
-                sm:leading-9
-              "
-            >
-              You never deserved to feel bad
-              <br className="hidden sm:block" />
-              because of something I said.
-            </p>
-          </motion.div>
-
-          {/* ───────────────── FINAL APOLOGY ───────────────── */}
+          {/* =========================================================
+              VIDEO
+          ========================================================== */}
 
           <motion.div
             initial={{
               opacity: 0,
               y: 30,
-              scale: 0.97,
+              scale: 0.98,
             }}
             animate={{
               opacity: 1,
@@ -260,117 +378,472 @@ export default function Final({ onRestart }: Props) {
             }}
             transition={{
               duration: 0.9,
-              delay: 0.75,
+              delay: 0.7,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="mx-auto mt-10 max-w-3xl"
+          >
+            <div className="relative">
+              {/* Outer glow */}
+              <div
+                className="
+                  pointer-events-none
+                  absolute
+                  -inset-8
+                  rounded-[3rem]
+                  bg-[#c87591]/[0.08]
+                  blur-[55px]
+                "
+              />
+
+              <div
+                className="
+                  relative
+                  rounded-[2rem]
+                  border
+                  border-[#e1a1b5]/15
+                  bg-[#0b090b]
+                  p-1.5
+                  shadow-[0_35px_100px_rgba(0,0,0,0.4)]
+                  sm:p-2
+                "
+              >
+                <div className="relative overflow-hidden rounded-[1.5rem] bg-black">
+                  <video
+                    ref={videoRef}
+                    src="/videos/apology.mp4"
+                    playsInline
+                    preload="metadata"
+                    controls={videoStarted}
+                    onEnded={() => setVideoEnded(true)}
+                    className="
+                      block
+                      h-auto
+                      max-h-[75vh]
+                      w-full
+                      bg-black
+                    "
+                  />
+
+                  {/* =================================================
+                      PLAY SCREEN
+                  ================================================== */}
+
+                  {!videoStarted && (
+                    <button
+                      type="button"
+                      onClick={startVideo}
+                      aria-label="Play apology video"
+                      className="
+                        absolute
+                        inset-0
+                        flex
+                        cursor-pointer
+                        items-center
+                        justify-center
+                        bg-black/25
+                        transition-colors
+                        hover:bg-black/15
+                      "
+                    >
+                      <motion.div
+                        initial={{
+                          opacity: 0,
+                          scale: 0.75,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          scale: 1,
+                        }}
+                        transition={{
+                          duration: 0.5,
+                        }}
+                        whileHover={{
+                          scale: 1.07,
+                        }}
+                        whileTap={{
+                          scale: 0.94,
+                        }}
+                        className="
+                          heart-glow
+                          flex
+                          h-18
+                          w-18
+                          items-center
+                          justify-center
+                          rounded-full
+                          border
+                          border-white/20
+                          bg-[#c87591]/85
+                          shadow-2xl
+                          backdrop-blur-md
+                          sm:h-20
+                          sm:w-20
+                        "
+                      >
+                        <Play
+                          size={26}
+                          fill="white"
+                          strokeWidth={1.5}
+                          className="ml-1 text-white"
+                        />
+                      </motion.div>
+                    </button>
+                  )}
+
+                  {!videoStarted && (
+                    <div
+                      className="
+                        pointer-events-none
+                        absolute
+                        bottom-5
+                        left-1/2
+                        -translate-x-1/2
+                        whitespace-nowrap
+                        rounded-full
+                        border
+                        border-white/10
+                        bg-black/35
+                        px-4
+                        py-2
+                        text-[9px]
+                        uppercase
+                        tracking-[0.25em]
+                        text-white/70
+                        backdrop-blur-md
+                      "
+                    >
+                      Tap to hear me out
+                    </div>
+                  )}
+
+                  {/* Mute */}
+                  {videoStarted && !videoEnded && (
+                    <button
+                      type="button"
+                      onClick={toggleMute}
+                      aria-label={isMuted ? "Unmute video" : "Mute video"}
+                      className="
+                        absolute
+                        right-3
+                        top-3
+                        z-20
+                        flex
+                        h-9
+                        w-9
+                        items-center
+                        justify-center
+                        rounded-full
+                        border
+                        border-white/15
+                        bg-black/35
+                        text-white/80
+                        backdrop-blur-md
+                        active:scale-95
+                      "
+                    >
+                      {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* =====================================================
+                VIDEO CAPTION
+            ====================================================== */}
+
+            <motion.p
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                duration: 0.7,
+                delay: 1,
+              }}
+              className="
+                mt-6
+                text-[10px]
+                uppercase
+                tracking-[0.3em]
+                text-[#918087]
+              "
+            >
+              No excuses. Just sorry.
+            </motion.p>
+          </motion.div>
+
+          {/* =========================================================
+              AFTER VIDEO
+          ========================================================== */}
+
+          <AnimatePresence>
+            {videoEnded && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  y: 20,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.8,
+                }}
+                className="mx-auto mt-10 max-w-xl"
+              >
+                <p
+                  className="
+                    text-sm
+                    leading-7
+                    text-[#b9a8ae]
+                    sm:text-base
+                  "
+                >
+                  Okay...
+                  <br />I know that was a little dramatic. 😂
+                </p>
+
+                <p
+                  className="
+                    romantic-title
+                    mt-5
+                    text-2xl
+                    leading-9
+                    text-[#fff5f1]
+                    sm:text-3xl
+                  "
+                >
+                  But I really am sorry,
+                  <br />
+                  <span className="romantic-gradient">{SITE.herName}.</span>
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* =========================================================
+              FINAL LETTER
+          ========================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.9,
+              delay: 1.05,
             }}
             className="
+              romantic-paper
               relative
               mx-auto
               mt-12
-              max-w-lg
+              max-w-xl
               overflow-hidden
-              rounded-[2rem]
-              border
-              border-rose-400/10
-              bg-gradient-to-br
-              from-rose-400/[0.08]
-              via-white/[0.035]
-              to-transparent
-              px-6
+              rounded-[1.8rem]
+              px-7
               py-10
-              shadow-2xl
-              shadow-black/20
-              backdrop-blur-xl
-              sm:px-10
+              text-left
+              sm:px-12
               sm:py-12
             "
           >
-            {/* Card glow */}
-            <div
+            {/* Paper light */}
+            <motion.div
+              animate={{
+                x: ["-120%", "120%"],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                repeatDelay: 4,
+                ease: "easeInOut",
+              }}
               className="
                 pointer-events-none
                 absolute
-                left-1/2
+                left-0
                 top-0
-                h-32
-                w-48
-                -translate-x-1/2
-                rounded-full
-                bg-rose-400/[0.06]
-                blur-3xl
+                h-full
+                w-1/3
+                skew-x-[-15deg]
+                bg-white/[0.13]
+                blur-2xl
               "
             />
 
             <div className="relative">
-              <Sparkles size={17} className="mx-auto text-rose-300/70" />
+              <div className="flex items-center gap-3">
+                <Flower2
+                  size={17}
+                  strokeWidth={1.2}
+                  className="text-[#a9667d]"
+                />
 
-              <p
-                className="
-                  mt-6
-                  text-2xl
-                  font-medium
-                  leading-9
-                  tracking-tight
-                  text-white
-                  sm:text-3xl
-                "
-              >
-                I&apos;m genuinely sorry,
-                <br />
-                {SITE.herName}.
-              </p>
-
-              <p
-                className="
-                  mx-auto
-                  mt-5
-                  max-w-sm
-                  text-sm
-                  leading-7
-                  text-zinc-500
-                "
-              >
-                You deserved kindness from me in that moment.
-                <br />
-                You deserved better words.
-              </p>
-
-              {/* Divider */}
-              <div className="mt-8 flex items-center justify-center gap-3">
-                <span className="h-px w-12 bg-white/10" />
-
-                <Heart size={13} className="fill-rose-400 text-rose-400" />
-
-                <span className="h-px w-12 bg-white/10" />
+                <span
+                  className="
+                    text-[9px]
+                    uppercase
+                    tracking-[0.3em]
+                    text-[#8d6874]
+                  "
+                >
+                  From my heart
+                </span>
               </div>
 
               <p
                 className="
+                  mt-8
+                  text-[1.65rem]
+                  leading-[1.35]
+                  text-[#432d35]
+                  sm:text-3xl
+                "
+                style={{
+                  fontFamily: "var(--font-playfair)",
+                }}
+              >
+                Rizwana,
+              </p>
+
+              <div
+                className="
                   mt-6
-                  text-sm
-                  italic
-                  text-zinc-500
+                  space-y-5
+                  text-[15px]
+                  leading-8
+                  text-[#634a52]
+                  sm:text-base
+                  sm:leading-9
                 "
               >
-                With all my heart,
+                <p>I can&apos;t undo that moment.</p>
+
+                <p>But I hope you can see how genuinely sorry I am.</p>
+
+                <p>
+                  What I said was wrong.
+                  <br />
+                  And you deserved much better from me.
+                </p>
+
+                <p
+                  className="
+                    pt-2
+                    text-lg
+                    font-medium
+                    leading-8
+                    text-[#4a3039]
+                    sm:text-xl
+                  "
+                  style={{
+                    fontFamily: "var(--font-playfair)",
+                  }}
+                >
+                  I never wanted you to question
+                  <br className="hidden sm:block" />
+                  how beautiful you are.
+                </p>
+              </div>
+
+              <div className="mt-9 flex items-center gap-3">
+                <span className="h-px w-12 bg-[#a9667d]/20" />
+
+                <Heart
+                  size={13}
+                  strokeWidth={1.5}
+                  className="fill-[#b76f88] text-[#b76f88]"
+                />
+
+                <span className="h-px w-12 bg-[#a9667d]/20" />
+              </div>
+
+              <p
+                className="
+                  mt-7
+                  text-sm
+                  italic
+                  text-[#876c74]
+                "
+              >
+                I just hope my sorry reaches you.
               </p>
 
               <p
                 className="
-                  mt-1
+                  mt-6
                   text-2xl
-                  text-zinc-200
+                  text-[#4b323b]
                   sm:text-3xl
                 "
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
                 }}
               >
-                {SITE.yourName}
+                — {SITE.yourName}
               </p>
             </div>
           </motion.div>
 
-          {/* ───────────────── NO PRESSURE ───────────────── */}
+          {/* =========================================================
+              FINAL LINE
+          ========================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.8,
+              delay: 1.3,
+            }}
+            className="mt-12"
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.015, 1],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <p
+                className="
+                  romantic-title
+                  text-2xl
+                  leading-9
+                  text-[#f2e2e4]
+                  sm:text-3xl
+                "
+              >
+                Ab thoda sa maan bhi jao na...
+                <br />
+                <span className="romantic-gradient">❤️</span>
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* =========================================================
+              SOFT ENDING
+          ========================================================== */}
 
           <motion.div
             initial={{
@@ -381,20 +854,19 @@ export default function Final({ onRestart }: Props) {
             }}
             transition={{
               duration: 0.8,
-              delay: 1.05,
+              delay: 1.5,
             }}
-            className="mx-auto mt-10 max-w-md"
+            className="mx-auto mt-9 max-w-md"
           >
             <p
               className="
                 text-xs
                 leading-6
-                text-zinc-600
+                text-[#918087]
               "
             >
               You don&apos;t have to say anything right now.
-              <br />
-              You don&apos;t have to make anything okay.
+              <br />I just wanted you to hear this from me.
             </p>
 
             <p
@@ -402,62 +874,18 @@ export default function Final({ onRestart }: Props) {
                 mt-4
                 text-sm
                 leading-7
-                text-zinc-500
+                text-[#aa989f]
               "
             >
-              I just wanted you to hear this
+              Properly.
               <br />
-              from me, properly.
+              From my heart.
             </p>
           </motion.div>
 
-          {/* ───────────────── FINAL HEART ───────────────── */}
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.8,
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-            }}
-            transition={{
-              duration: 0.7,
-              delay: 1.25,
-            }}
-            className="mt-10"
-          >
-            <motion.div
-              animate={{
-                y: [0, -4, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="
-                inline-flex
-                items-center
-                justify-center
-                rounded-full
-                border
-                border-white/5
-                bg-white/[0.025]
-                px-5
-                py-3
-              "
-            >
-              <Heart size={13} className="fill-rose-400/70 text-rose-400/70" />
-
-              <span className="ml-2 text-[11px] text-zinc-600">
-                Always rooting for us
-              </span>
-            </motion.div>
-          </motion.div>
-
-          {/* ───────────────── RESTART ───────────────── */}
+          {/* =========================================================
+              RESTART
+          ========================================================== */}
 
           <motion.div
             initial={{
@@ -470,23 +898,35 @@ export default function Final({ onRestart }: Props) {
             }}
             transition={{
               duration: 0.7,
-              delay: 1.4,
+              delay: 1.7,
             }}
             className="mt-10"
           >
             <Button
-              text="Read it all again"
+              text="Start from the beginning"
               variant="secondary"
               onClick={onRestart}
             />
 
+            <div className="mt-7 flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-white/[0.07]" />
+
+              <Stars
+                size={11}
+                strokeWidth={1.2}
+                className="text-[#d9b49e]/45"
+              />
+
+              <span className="h-px w-8 bg-white/[0.07]" />
+            </div>
+
             <p
               className="
-                mt-6
-                text-[10px]
+                mt-5
+                text-[9px]
                 uppercase
-                tracking-[0.25em]
-                text-zinc-800
+                tracking-[0.28em]
+                text-[#76656d]
               "
             >
               Made with love · {SITE.yourName}

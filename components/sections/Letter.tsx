@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { motion } from "framer-motion";
-import { Feather, Flower2, Heart, Quote } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Feather, Flower2, Heart, Quote, Sparkles } from "lucide-react";
 
 import Section from "../ui/Section";
 import Button from "../Button";
@@ -13,14 +13,63 @@ type Props = {
   onNext: () => void;
 };
 
-export default function Letter({ onNext }: Props) {
-  const [typingFinished, setTypingFinished] = useState(false);
+/* =========================================================
+   TINY STARS
+   ========================================================= */
 
-  const handleTypingComplete = useCallback(() => {
-    setTypingFinished(true);
-  }, []);
+const stars = [
+  { left: "7%", top: "13%", delay: 0 },
+  { left: "91%", top: "18%", delay: 1.2 },
+  { left: "4%", top: "61%", delay: 2 },
+  { left: "95%", top: "70%", delay: 0.8 },
+  { left: "17%", top: "84%", delay: 2.5 },
+  { left: "82%", top: "82%", delay: 1.7 },
+];
 
-  const letter = `Rizwana,
+/* =========================================================
+   FLOATING PETALS
+   ========================================================= */
+
+const petals = [
+  {
+    left: "6%",
+    top: "27%",
+    size: 12,
+    rotate: -25,
+    delay: 0,
+    duration: 9,
+  },
+  {
+    left: "91%",
+    top: "30%",
+    size: 10,
+    rotate: 35,
+    delay: 1.4,
+    duration: 10,
+  },
+  {
+    left: "8%",
+    top: "77%",
+    size: 8,
+    rotate: 50,
+    delay: 2.2,
+    duration: 11,
+  },
+  {
+    left: "94%",
+    top: "79%",
+    size: 9,
+    rotate: -35,
+    delay: 0.8,
+    duration: 9,
+  },
+];
+
+/* =========================================================
+   LETTER
+   ========================================================= */
+
+const letter = `Rizwana,
 
 I have been thinking about what I said.
 
@@ -57,23 +106,207 @@ I just wanted you to know that.
 
 I'm genuinely sorry, Rizwana.`;
 
+/* =========================================================
+   COMPONENT
+   ========================================================= */
+
+export default function Letter({ onNext }: Props) {
+  const [typingFinished, setTypingFinished] = useState(false);
+
+  const handleTypingComplete = useCallback(() => {
+    setTypingFinished(true);
+  }, []);
+
   return (
     <Section id="letter">
-      <div className="mx-auto w-full max-w-4xl">
-        {/* INTRO */}
+      <div className="relative mx-auto w-full max-w-4xl">
+        {/* =====================================================
+            ATMOSPHERE
+        ===================================================== */}
+
+        <div className="pointer-events-none absolute inset-0">
+          {/* Main paper glow */}
+          <motion.div
+            animate={{
+              opacity: [0.07, 0.16, 0.07],
+              scale: [0.94, 1.06, 0.94],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="
+              absolute
+              left-1/2
+              top-[40%]
+              h-[28rem]
+              w-[28rem]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-[#c87591]/[0.1]
+              blur-[120px]
+              sm:h-[38rem]
+              sm:w-[38rem]
+            "
+          />
+
+          {/* Champagne light */}
+          <motion.div
+            animate={{
+              opacity: [0.02, 0.07, 0.02],
+              x: [-18, 18, -18],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="
+              absolute
+              left-1/2
+              top-[8%]
+              h-44
+              w-72
+              -translate-x-1/2
+              rounded-full
+              bg-[#efd7c9]/[0.04]
+              blur-[90px]
+            "
+          />
+
+          {/* Wine glow */}
+          <motion.div
+            animate={{
+              opacity: [0.025, 0.08, 0.025],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 11,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="
+              absolute
+              bottom-[4%]
+              right-[-8%]
+              h-64
+              w-64
+              rounded-full
+              bg-[#8f4564]/[0.08]
+              blur-[110px]
+            "
+          />
+
+          {/* =================================================
+              STARS
+          ================================================= */}
+
+          {stars.map((star, index) => (
+            <motion.span
+              key={index}
+              className="
+                absolute
+                h-[2px]
+                w-[2px]
+                rounded-full
+                bg-[#efdcd5]
+              "
+              style={{
+                left: star.left,
+                top: star.top,
+              }}
+              animate={{
+                opacity: [0.025, 0.25, 0.025],
+                scale: [1, 1.3, 1],
+              }}
+              transition={{
+                duration: 4 + index * 0.5,
+                delay: star.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+
+          {/* =================================================
+              PETALS
+          ================================================= */}
+
+          {petals.map((petal, index) => (
+            <motion.div
+              key={index}
+              initial={{
+                opacity: 0,
+                y: 0,
+                rotate: petal.rotate,
+              }}
+              animate={{
+                opacity: [0, 0.16, 0],
+                y: [0, -25, 0],
+                x: [0, index % 2 === 0 ? 9 : -9, 0],
+                rotate: [petal.rotate, petal.rotate + 16, petal.rotate - 8],
+              }}
+              transition={{
+                duration: petal.duration,
+                delay: petal.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute"
+              style={{
+                left: petal.left,
+                top: petal.top,
+              }}
+            >
+              <div
+                className="
+                  rounded-[100%_0_100%_0]
+                  bg-gradient-to-br
+                  from-[#e2a2b5]/35
+                  to-[#8f4564]/5
+                "
+                style={{
+                  width: petal.size,
+                  height: petal.size * 0.65,
+                }}
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* =====================================================
+            INTRO
+        ===================================================== */}
+
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-12 text-center"
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.9,
+          }}
+          className="
+            relative
+            z-10
+            mb-12
+            text-center
+          "
         >
+          {/* Feather */}
           <motion.div
             animate={{
               rotate: [0, -4, 4, 0],
-              scale: [1, 1.04, 1],
+              y: [0, -2, 0],
             }}
             transition={{
-              duration: 3,
+              duration: 4,
               repeat: Infinity,
               ease: "easeInOut",
             }}
@@ -86,65 +319,118 @@ I'm genuinely sorry, Rizwana.`;
               justify-center
               rounded-2xl
               border
-              border-rose-400/15
-              bg-rose-400/5
+              border-[#e2a2b5]/15
+              bg-[#e2a2b5]/[0.045]
+              shadow-[0_0_30px_rgba(200,117,145,0.06)]
             "
           >
-            <Feather size={20} className="text-rose-300" />
+            <Feather size={20} strokeWidth={1.25} className="text-[#e2a2b5]" />
           </motion.div>
 
-          <p
+          {/* Eyebrow */}
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            transition={{
+              delay: 0.35,
+              duration: 0.8,
+            }}
             className="
               mt-5
-              text-[10px]
-              uppercase
-              tracking-[0.4em]
-              text-rose-300/70
+              flex
+              items-center
+              justify-center
+              gap-3
             "
           >
-            From my heart
-          </p>
+            <span className="h-px w-7 bg-[#e2a2b5]/20" />
 
-          <h2
+            <p
+              className="
+                text-[10px]
+                uppercase
+                tracking-[0.4em]
+                text-[#e2a2b5]/70
+              "
+            >
+              From my heart
+            </p>
+
+            <span className="h-px w-7 bg-[#e2a2b5]/20" />
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h2
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.5,
+              duration: 0.9,
+            }}
             className="
-              mt-4
-              text-4xl
-              font-semibold
-              tracking-tight
-              text-white
+              romantic-title
+              mt-5
+              text-[2.7rem]
+              leading-[1.05]
               sm:text-5xl
+              md:text-6xl
             "
           >
             There are some things
             <br />
-            <span className="text-rose-300">I want to say properly.</span>
-          </h2>
+            <span className="romantic-gradient">I want to say properly.</span>
+          </motion.h2>
 
-          <p
+          <motion.p
+            initial={{
+              opacity: 0,
+              y: 10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 0.85,
+              duration: 0.8,
+            }}
             className="
               mx-auto
               mt-5
               max-w-md
               text-sm
               leading-7
-              text-zinc-500
+              text-[#b8a5ad]
             "
           >
             So this time, I&apos;m not going to rush my words.
             <br />I just want you to hear me.
-          </p>
+          </motion.p>
         </motion.div>
 
-        {/* LETTER */}
-        <div className="relative">
-          {/* Ambient glow */}
+        {/* =====================================================
+            LETTER PAPER
+        ===================================================== */}
+
+        <div className="relative z-10">
+          {/* Paper aura */}
           <motion.div
             animate={{
-              opacity: [0.2, 0.4, 0.2],
-              scale: [1, 1.08, 1],
+              opacity: [0.1, 0.2, 0.1],
+              scale: [1, 1.06, 1],
             }}
             transition={{
-              duration: 5,
+              duration: 6,
               repeat: Infinity,
               ease: "easeInOut",
             }}
@@ -153,50 +439,87 @@ I'm genuinely sorry, Rizwana.`;
               absolute
               left-1/2
               top-1/2
-              h-80
-              w-80
+              h-[80%]
+              w-[80%]
               -translate-x-1/2
               -translate-y-1/2
               rounded-full
-              bg-rose-500/10
-              blur-[110px]
+              bg-[#c87591]/[0.1]
+              blur-[100px]
             "
           />
+
+          {/* =================================================
+              PAPER
+          ================================================= */}
 
           <motion.div
             initial={{
               opacity: 0,
               y: 35,
-              scale: 0.98,
+              scale: 0.97,
+              rotateX: 5,
             }}
             animate={{
               opacity: 1,
               y: 0,
               scale: 1,
+              rotateX: 0,
             }}
             transition={{
-              duration: 0.9,
+              duration: 1,
               ease: "easeOut",
             }}
             className="
+              romantic-paper
               relative
-              z-10
               w-full
               overflow-hidden
               rounded-[2rem]
-              bg-[#fff8f2]
               px-6
               py-10
-              shadow-2xl
-              shadow-black/40
               sm:px-10
               sm:py-14
               md:px-14
               lg:px-16
             "
           >
-            {/* Paper decoration */}
-            <div
+            {/* =================================================
+                PAPER LIGHT SWEEP
+            ================================================= */}
+
+            <motion.div
+              animate={{
+                x: ["-140%", "180%"],
+              }}
+              transition={{
+                duration: 11,
+                repeat: Infinity,
+                repeatDelay: 3,
+                ease: "linear",
+              }}
+              className="
+                pointer-events-none
+                absolute
+                top-0
+                h-full
+                w-28
+                -skew-x-[18deg]
+                bg-white/[0.08]
+                blur-2xl
+              "
+            />
+
+            {/* Top warm glow */}
+            <motion.div
+              animate={{
+                opacity: [0.15, 0.32, 0.15],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
               className="
                 pointer-events-none
                 absolute
@@ -205,51 +528,79 @@ I'm genuinely sorry, Rizwana.`;
                 h-72
                 w-72
                 rounded-full
-                bg-rose-200/30
+                bg-[#e7bdb2]/20
                 blur-3xl
               "
             />
 
+            {/* Bottom rose glow */}
             <div
               className="
                 pointer-events-none
                 absolute
-                -bottom-24
-                -left-24
+                -bottom-28
+                -left-28
                 h-72
                 w-72
                 rounded-full
-                bg-pink-200/20
+                bg-[#e5b9bd]/15
                 blur-3xl
               "
             />
 
-            {/* Decorative hearts */}
-            <Heart
-              size={14}
+            {/* Decorative flower */}
+            <motion.div
+              animate={{
+                rotate: [0, 4, -2, 0],
+                opacity: [0.14, 0.3, 0.14],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
               className="
                 pointer-events-none
                 absolute
-                right-8
-                top-8
-                rotate-12
-                fill-rose-300/40
-                text-rose-300/50
+                right-7
+                top-7
+                text-[#c87591]/30
               "
-            />
+            >
+              <Flower2 size={25} strokeWidth={1} />
+            </motion.div>
 
-            <Heart
-              size={9}
+            {/* Tiny heart */}
+            <motion.div
+              animate={{
+                scale: [1, 1.08, 1],
+                opacity: [0.3, 0.55, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
               className="
                 pointer-events-none
                 absolute
-                bottom-12
+                bottom-8
                 left-8
-                -rotate-12
-                fill-rose-300/30
-                text-rose-300/40
               "
-            />
+            >
+              <Heart
+                size={13}
+                strokeWidth={1}
+                className="
+                  fill-[#c87591]/20
+                  text-[#c87591]/45
+                "
+              />
+            </motion.div>
+
+            {/* =================================================
+                PAPER CONTENT
+            ================================================= */}
 
             <div className="relative">
               {/* Letter header */}
@@ -260,24 +611,28 @@ I'm genuinely sorry, Rizwana.`;
                   items-center
                   justify-between
                   border-b
-                  border-zinc-900/10
+                  border-[#3e2830]/10
                   pb-5
                 "
               >
                 <div>
                   <p
                     className="
-                      text-[10px]
+                      text-[9px]
                       uppercase
                       tracking-[0.3em]
-                      text-zinc-400
+                      text-[#806a70]
                     "
                   >
                     A letter from
                   </p>
 
                   <p
-                    className="mt-1 text-lg text-zinc-800"
+                    className="
+                      mt-1
+                      text-lg
+                      text-[#3e2830]
+                    "
                     style={{
                       fontFamily: "Georgia, 'Times New Roman', serif",
                     }}
@@ -286,27 +641,62 @@ I'm genuinely sorry, Rizwana.`;
                   </p>
                 </div>
 
-                <Heart size={18} className="fill-rose-400 text-rose-400" />
+                <motion.div
+                  animate={{
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 2.4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Heart
+                    size={18}
+                    strokeWidth={1.4}
+                    className="
+                      fill-[#d889a2]
+                      text-[#d889a2]
+                    "
+                  />
+                </motion.div>
               </div>
 
-              {/* Greeting */}
+              {/* =================================================
+                  GREETING
+              ================================================= */}
+
               <div className="relative">
                 <Quote
-                  size={30}
+                  size={32}
+                  strokeWidth={1}
                   className="
+                    pointer-events-none
                     absolute
-                    -left-1
-                    -top-4
-                    text-rose-300/20
+                    -left-2
+                    -top-5
+                    text-[#c87591]/15
                   "
                 />
 
-                <h3
+                <motion.h3
+                  initial={{
+                    opacity: 0,
+                    x: -10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  transition={{
+                    delay: 0.65,
+                    duration: 0.7,
+                  }}
                   className="
                     relative
                     pl-2
                     text-3xl
-                    text-zinc-800
+                    text-[#3e2830]
                     sm:text-4xl
                   "
                   style={{
@@ -314,43 +704,69 @@ I'm genuinely sorry, Rizwana.`;
                   }}
                 >
                   Dear {SITE.herName},
-                </h3>
+                </motion.h3>
               </div>
 
-              {/* Typing indicator */}
-              {!typingFinished && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="
-                    mt-5
-                    flex
-                    items-center
-                    gap-2
-                    text-xs
-                    text-zinc-400
-                  "
-                >
-                  <span
-                    className="
-                      h-1.5
-                      w-1.5
-                      animate-pulse
-                      rounded-full
-                      bg-rose-400
-                    "
-                  />
-                  Writing this carefully...
-                </motion.div>
-              )}
+              {/* =================================================
+                  TYPING INDICATOR
+              ================================================= */}
 
-              {/* Letter body */}
+              <AnimatePresence>
+                {!typingFinished && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 5,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: -5,
+                    }}
+                    className="
+                      mt-5
+                      flex
+                      items-center
+                      gap-2
+                      text-xs
+                      text-[#806a70]
+                    "
+                  >
+                    <motion.span
+                      animate={{
+                        scale: [1, 1.4, 1],
+                        opacity: [0.45, 1, 0.45],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                      }}
+                      className="
+                        h-1.5
+                        w-1.5
+                        rounded-full
+                        bg-[#c87591]
+                      "
+                    />
+
+                    <span>Writing this carefully...</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* =================================================
+                  LETTER BODY
+              ================================================= */}
+
               <div
                 className="
                   mt-8
                   text-[17px]
                   leading-[2]
-                  text-zinc-700
+                  text-[#4c373e]
                   sm:text-lg
                   sm:leading-[2.1]
                 "
@@ -365,140 +781,222 @@ I'm genuinely sorry, Rizwana.`;
                 />
               </div>
 
-              {/* Signature */}
-              {typingFinished && (
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: 15,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.8,
-                  }}
-                  className="
-                    mt-10
-                    border-t
-                    border-zinc-900/10
-                    pt-7
-                    text-right
-                  "
-                  style={{
-                    fontFamily: "Georgia, 'Times New Roman', serif",
-                  }}
-                >
-                  <p
-                    className="
-                      text-sm
-                      italic
-                      text-zinc-500
-                    "
-                  >
-                    With all my heart,
-                  </p>
+              {/* =================================================
+                  SIGNATURE
+              ================================================= */}
 
-                  <p
+              <AnimatePresence>
+                {typingFinished && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 18,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    transition={{
+                      duration: 0.9,
+                    }}
                     className="
-                      mt-1
-                      text-3xl
-                      text-zinc-800
+                      mt-10
+                      border-t
+                      border-[#3e2830]/10
+                      pt-7
+                      text-right
                     "
+                    style={{
+                      fontFamily: "Georgia, 'Times New Roman', serif",
+                    }}
                   >
-                    {SITE.yourName}
-                  </p>
-
-                  <div className="mt-2 flex justify-end">
-                    <Heart
-                      size={14}
+                    <p
                       className="
-                        fill-rose-400
-                        text-rose-400
+                        text-sm
+                        italic
+                        text-[#806a70]
                       "
-                    />
-                  </div>
-                </motion.div>
-              )}
+                    >
+                      With all my heart,
+                    </p>
+
+                    <p
+                      className="
+                        mt-1
+                        text-3xl
+                        text-[#3e2830]
+                      "
+                    >
+                      {SITE.yourName}
+                    </p>
+
+                    <div className="mt-2 flex justify-end">
+                      <motion.div
+                        animate={{
+                          scale: [1, 1.15, 1],
+                        }}
+                        transition={{
+                          duration: 2.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <Heart
+                          size={14}
+                          strokeWidth={1.3}
+                          className="
+                            fill-[#d889a2]
+                            text-[#d889a2]
+                          "
+                        />
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>
 
-        {/* AFTER LETTER */}
-        {typingFinished && (
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 25,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.7,
-              delay: 0.35,
-            }}
-            className="mt-12 text-center"
-          >
-            <div
+        {/* =====================================================
+            AFTER LETTER
+        ===================================================== */}
+
+        <AnimatePresence>
+          {typingFinished && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 25,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.8,
+                delay: 0.35,
+              }}
               className="
-                mx-auto
-                mb-6
-                flex
-                items-center
-                justify-center
-                gap-3
+                relative
+                z-10
+                mt-12
+                text-center
               "
             >
-              <span className="h-px w-12 bg-white/10" />
+              {/* Divider */}
+              <div
+                className="
+                  mx-auto
+                  mb-6
+                  flex
+                  items-center
+                  justify-center
+                  gap-3
+                "
+              >
+                <span className="h-px w-12 bg-[#e2a2b5]/15" />
 
-              <Flower2 size={15} className="text-rose-400" />
+                <motion.div
+                  animate={{
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Flower2
+                    size={15}
+                    strokeWidth={1}
+                    className="text-[#c87591]"
+                  />
+                </motion.div>
 
-              <span className="h-px w-12 bg-white/10" />
-            </div>
+                <span className="h-px w-12 bg-[#e2a2b5]/15" />
+              </div>
 
-            <p
-              className="
-                text-sm
-                leading-7
-                text-zinc-500
-              "
-            >
-              I hope you can feel
-              <br />
-              how sincerely I mean this.
-            </p>
+              <p
+                className="
+                  text-sm
+                  leading-7
+                  text-[#b8a5ad]
+                "
+              >
+                I hope you can feel
+                <br />
+                how sincerely I mean this.
+              </p>
 
-            <div
-              className="
-                mx-auto
-                mt-7
-                w-full
-                max-w-sm
-              "
-            >
-              <Button
-                text="There's more I want to show you"
-                pulse
-                onClick={onNext}
-              />
-            </div>
+              {/* CTA */}
+              <div
+                className="
+                  mx-auto
+                  mt-7
+                  w-full
+                  max-w-sm
+                "
+              >
+                <motion.div
+                  animate={{
+                    boxShadow: [
+                      "0 0 0 rgba(200,117,145,0)",
+                      "0 0 30px rgba(200,117,145,0.13)",
+                      "0 0 0 rgba(200,117,145,0)",
+                    ],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="rounded-full"
+                >
+                  <Button
+                    text="There's more I want to show you"
+                    pulse
+                    onClick={onNext}
+                  />
+                </motion.div>
+              </div>
 
-            <p
-              className="
-                mt-5
-                text-[10px]
-                uppercase
-                tracking-[0.25em]
-                text-zinc-700
-              "
-            >
-              One more little part of this story
-            </p>
-          </motion.div>
-        )}
+              {/* Bottom whisper */}
+              <motion.div
+                animate={{
+                  opacity: [0.25, 0.5, 0.25],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="
+                  mt-5
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
+                "
+              >
+                <Sparkles size={9} className="text-[#e2a2b5]/35" />
+
+                <p
+                  className="
+                    text-[9px]
+                    uppercase
+                    tracking-[0.3em]
+                    text-[#b8a5ad]/45
+                  "
+                >
+                  One more little part of this story
+                </p>
+
+                <Sparkles size={9} className="text-[#e2a2b5]/35" />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </Section>
   );

@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Heart, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ArrowRight, Heart, Sparkles, Stars } from "lucide-react";
 import { useState } from "react";
 
 import Section from "../ui/Section";
@@ -39,6 +39,22 @@ const memories = [
   },
 ];
 
+const stars = Array.from({ length: 18 }, (_, index) => ({
+  id: index,
+  left: `${(index * 37) % 100}%`,
+  top: `${(index * 61) % 100}%`,
+  size: 2 + (index % 3),
+  delay: (index % 5) * 0.7,
+}));
+
+const petals = Array.from({ length: 9 }, (_, index) => ({
+  id: index,
+  left: `${8 + ((index * 29) % 84)}%`,
+  delay: index * 1.1,
+  duration: 8 + (index % 4),
+  size: 7 + (index % 4),
+}));
+
 export default function Gallery({ onNext }: Props) {
   const [active, setActive] = useState(0);
 
@@ -55,58 +71,144 @@ export default function Gallery({ onNext }: Props) {
   return (
     <Section id="gallery">
       <div className="relative w-full overflow-hidden">
-        {/* =====================================================
-            BACKGROUND
-        ====================================================== */}
+        {/* =========================================================
+            ATMOSPHERE
+        ========================================================== */}
 
-        <motion.div
-          animate={{
-            scale: [1, 1.08, 1],
-            opacity: [0.35, 0.6, 0.35],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="
-            pointer-events-none
-            absolute
-            left-1/2
-            top-1/3
-            h-[28rem]
-            w-[28rem]
-            -translate-x-1/2
-            -translate-y-1/2
-            rounded-full
-            bg-rose-500/[0.07]
-            blur-[120px]
-          "
-        />
-
-        <div className="relative z-10">
-          {/* =====================================================
-              HEADER
-          ====================================================== */}
-
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {/* Main rose glow */}
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 25,
-            }}
             animate={{
-              opacity: 1,
-              y: 0,
+              scale: [1, 1.12, 1],
+              opacity: [0.28, 0.5, 0.28],
             }}
             transition={{
-              duration: 0.8,
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="
+              absolute
+              left-1/2
+              top-[30%]
+              h-[30rem]
+              w-[30rem]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-[#c87591]/[0.09]
+              blur-[120px]
+            "
+          />
+
+          {/* Wine glow */}
+          <div
+            className="
+              absolute
+              -left-32
+              top-[45%]
+              h-72
+              w-72
+              rounded-full
+              bg-[#8f4564]/[0.1]
+              blur-[110px]
+            "
+          />
+
+          {/* Champagne glow */}
+          <div
+            className="
+              absolute
+              -right-32
+              top-[18%]
+              h-64
+              w-64
+              rounded-full
+              bg-[#efd7c9]/[0.055]
+              blur-[100px]
+            "
+          />
+
+          {/* Stars */}
+          {stars.map((star) => (
+            <motion.span
+              key={star.id}
+              animate={{
+                opacity: [0.08, 0.45, 0.08],
+                scale: [0.7, 1, 0.7],
+              }}
+              transition={{
+                duration: 3 + star.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: star.delay,
+              }}
+              className="absolute rounded-full bg-[#f3d7dd]"
+              style={{
+                left: star.left,
+                top: star.top,
+                width: star.size,
+                height: star.size,
+              }}
+            />
+          ))}
+
+          {/* Floating petals */}
+          {petals.map((petal) => (
+            <motion.span
+              key={petal.id}
+              initial={{
+                y: "-10vh",
+                rotate: 0,
+                opacity: 0,
+              }}
+              animate={{
+                y: "110vh",
+                rotate: 180,
+                opacity: [0, 0.3, 0.16, 0],
+              }}
+              transition={{
+                duration: petal.duration,
+                repeat: Infinity,
+                ease: "linear",
+                delay: petal.delay,
+              }}
+              className="
+                absolute
+                top-0
+                rounded-[100%_0_100%_0]
+                border
+                border-[#e6a6b9]/20
+                bg-[#d889a2]/[0.055]
+              "
+              style={{
+                left: petal.left,
+                width: petal.size,
+                height: petal.size * 1.45,
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative z-10">
+          {/* =========================================================
+              INTRO
+          ========================================================== */}
+
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.85,
+              ease: "easeOut",
             }}
             className="mx-auto max-w-2xl text-center"
           >
+            {/* Heart */}
             <motion.div
               animate={{
-                scale: [1, 1.06, 1],
-                rotate: [0, 3, -3, 0],
+                scale: [1, 1.07, 1],
+                rotate: [0, 2, -2, 0],
               }}
               transition={{
                 duration: 4,
@@ -114,6 +216,7 @@ export default function Gallery({ onNext }: Props) {
                 ease: "easeInOut",
               }}
               className="
+                heart-glow
                 mx-auto
                 flex
                 h-14
@@ -122,50 +225,49 @@ export default function Gallery({ onNext }: Props) {
                 justify-center
                 rounded-full
                 border
-                border-rose-300/15
-                bg-rose-400/[0.06]
-                shadow-lg
-                shadow-rose-500/10
+                border-[#e1a1b5]/15
+                bg-[#c87591]/[0.06]
               "
             >
-              <Heart size={21} className="fill-rose-400 text-rose-400" />
+              <Heart
+                size={21}
+                strokeWidth={1.5}
+                className="fill-[#d98fa5] text-[#d98fa5]"
+              />
             </motion.div>
 
             <div className="mt-7 flex items-center justify-center gap-3">
-              <span className="h-px w-8 bg-rose-400/25" />
+              <span className="h-px w-8 bg-[#d889a2]/25" />
 
               <p
                 className="
                   text-[10px]
                   uppercase
-                  tracking-[0.4em]
-                  text-rose-300/70
+                  tracking-[0.42em]
+                  text-[#dca5b6]/65
                   sm:text-xs
                 "
               >
-                Our little memories
+                The parts of you I remember
               </p>
 
-              <span className="h-px w-8 bg-rose-400/25" />
+              <span className="h-px w-8 bg-[#d889a2]/25" />
             </div>
 
             <h2
               className="
+                romantic-title
                 mt-5
                 text-4xl
                 font-semibold
                 leading-[1.08]
                 tracking-[-0.045em]
-                text-white
                 sm:text-5xl
               "
-              style={{
-                fontFamily: "var(--font-playfair)",
-              }}
             >
-              The things I don&apos;t want
+              Some things are too beautiful
               <br />
-              <span className="text-rose-300">to forget.</span>
+              <span className="romantic-gradient">to simply forget.</span>
             </h2>
 
             <p
@@ -175,251 +277,291 @@ export default function Gallery({ onNext }: Props) {
                 max-w-lg
                 text-sm
                 leading-7
-                text-zinc-500
+                text-[#bca9b0]
                 sm:text-base
               "
             >
-              Not everything important needs a photograph.
-              <br className="hidden sm:block" />
-              Some memories live in the way someone makes you feel.
+              I don&apos;t want to remember just the big moments.
+              <br className="hidden sm:block" />I want to remember the little
+              pieces that made them ours.
             </p>
           </motion.div>
 
-          {/* =====================================================
-              PHOTO CARD
-          ====================================================== */}
+          {/* =========================================================
+              MEMORY CARD
+          ========================================================== */}
 
           <div className="mx-auto mt-10 w-full max-w-3xl sm:mt-12">
             <motion.div
-              key={memory.image}
-              initial={{
-                opacity: 0,
-                y: 18,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              transition={{
-                duration: 0.5,
-                ease: "easeOut",
-              }}
-              drag="x"
-              dragConstraints={{
-                left: 0,
-                right: 0,
-              }}
-              dragElastic={0.12}
-              onDragEnd={(_, info) => {
-                if (info.offset.x < -70) {
-                  nextMemory();
-                }
-
-                if (info.offset.x > 70) {
-                  previousMemory();
-                }
-              }}
               className="
+                romantic-glass
                 overflow-hidden
                 rounded-[2rem]
-                border
-                border-white/[0.08]
-                bg-white/[0.025]
                 p-2
-                shadow-2xl
-                shadow-black/30
-                backdrop-blur-xl
                 sm:p-3
               "
+              layout
             >
-              {/* =================================================
+              {/* =====================================================
                   PHOTO
-              ================================================== */}
+              ====================================================== */}
 
               <div
                 className="
-    relative
-    w-full
-    overflow-hidden
-    rounded-[1.5rem]
-    bg-[#0b090b]
-  "
+                  relative
+                  overflow-hidden
+                  rounded-[1.55rem]
+                  bg-[#0d0a0d]
+                "
               >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={memory.image}
+                    initial={{
+                      opacity: 0,
+                      scale: 1.025,
+                      x: 25,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      x: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.985,
+                      x: -25,
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    drag="x"
+                    dragConstraints={{
+                      left: 0,
+                      right: 0,
+                    }}
+                    dragElastic={0.12}
+                    onDragEnd={(_, info) => {
+                      if (info.offset.x < -70) {
+                        nextMemory();
+                      }
+
+                      if (info.offset.x > 70) {
+                        previousMemory();
+                      }
+                    }}
+                    className="relative w-full cursor-grab active:cursor-grabbing"
+                  >
+                    <Image
+                      src={memory.image}
+                      alt={memory.title}
+                      width={1200}
+                      height={1600}
+                      sizes="(max-width: 640px) 92vw, 720px"
+                      className="
+                        block
+                        h-auto
+                        w-full
+                        object-contain
+                      "
+                      priority={active === 0}
+                    />
+
+                    {/* Soft cinematic shade */}
+                    <div
+                      className="
+                        pointer-events-none
+                        absolute
+                        inset-0
+                        bg-gradient-to-t
+                        from-black/35
+                        via-transparent
+                        to-black/[0.06]
+                      "
+                    />
+
+                    {/* Soft rose vignette */}
+                    <div
+                      className="
+                        pointer-events-none
+                        absolute
+                        inset-0
+                        bg-[radial-gradient(circle_at_50%_50%,transparent_45%,rgba(20,10,15,0.18)_100%)]
+                      "
+                    />
+
+                    {/* Top-right heart */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.08, 1],
+                      }}
+                      transition={{
+                        duration: 2.8,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      className="
+                        heart-glow
+                        absolute
+                        right-4
+                        top-4
+                        flex
+                        h-10
+                        w-10
+                        items-center
+                        justify-center
+                        rounded-full
+                        border
+                        border-white/15
+                        bg-black/30
+                        backdrop-blur-md
+                      "
+                    >
+                      <Heart
+                        size={17}
+                        strokeWidth={1.6}
+                        className="fill-[#f1b2c3] text-[#f1b2c3]"
+                      />
+                    </motion.div>
+
+                    {/* Image number */}
+                    <div
+                      className="
+                        absolute
+                        left-4
+                        top-4
+                        flex
+                        items-center
+                        gap-2
+                        rounded-full
+                        border
+                        border-white/10
+                        bg-black/25
+                        px-3
+                        py-1.5
+                        backdrop-blur-md
+                      "
+                    >
+                      <span className="text-[9px] tracking-[0.25em] text-white/50">
+                        MEMORY
+                      </span>
+
+                      <span className="text-[10px] font-medium text-white/85">
+                        {memory.number}
+                      </span>
+                    </div>
+
+                    {/* Bottom image caption */}
+                    <div className="absolute bottom-4 left-4">
+                      <span
+                        className="
+                          rounded-full
+                          border
+                          border-white/12
+                          bg-black/30
+                          px-3
+                          py-1.5
+                          text-[9px]
+                          uppercase
+                          tracking-[0.22em]
+                          text-white/70
+                          backdrop-blur-md
+                        "
+                      >
+                        A moment I want to keep
+                      </span>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* =====================================================
+                  MEMORY COPY
+              ====================================================== */}
+
+              <AnimatePresence mode="wait">
                 <motion.div
-                  key={memory.image}
+                  key={`${memory.image}-copy`}
                   initial={{
                     opacity: 0,
-                    scale: 0.98,
+                    y: 12,
                   }}
                   animate={{
                     opacity: 1,
-                    scale: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: -8,
                   }}
                   transition={{
-                    duration: 0.5,
-                    ease: "easeOut",
+                    duration: 0.35,
                   }}
-                  className="relative w-full"
+                  className="
+                    px-5
+                    pb-3
+                    pt-8
+                    text-center
+                    sm:px-10
+                  "
                 >
-                  <Image
-                    src={memory.image}
-                    alt={memory.title}
-                    width={1200}
-                    height={1600}
-                    sizes="(max-width: 640px) 92vw, 720px"
-                    className="
-        block
-        h-auto
-        w-full
-        object-contain
-      "
-                    priority={active === 0}
-                  />
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="h-px w-7 bg-[#d889a2]/20" />
 
-                  {/* Very subtle cinematic shade */}
-                  <div
-                    className="
-        pointer-events-none
-        absolute
-        inset-0
-        bg-gradient-to-t
-        from-black/20
-        via-transparent
-        to-transparent
-      "
-                  />
+                    <Sparkles
+                      size={12}
+                      strokeWidth={1.5}
+                      className="text-[#e2a2b5]/60"
+                    />
 
-                  {/* Heart */}
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.08, 1],
-                    }}
-                    transition={{
-                      duration: 2.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="
-        absolute
-        right-4
-        top-4
-        flex
-        h-10
-        w-10
-        items-center
-        justify-center
-        rounded-full
-        border
-        border-white/15
-        bg-black/30
-        backdrop-blur-md
-      "
-                  >
-                    <Heart size={17} className="fill-white text-white" />
-                  </motion.div>
-
-                  {/* Caption */}
-                  <div className="absolute bottom-4 left-4">
-                    <span
-                      className="
-          rounded-full
-          border
-          border-white/15
-          bg-black/35
-          px-3
-          py-1.5
-          text-[9px]
-          uppercase
-          tracking-[0.2em]
-          text-white/75
-          backdrop-blur-md
-        "
-                    >
-                      A moment worth keeping
-                    </span>
+                    <span className="h-px w-7 bg-[#d889a2]/20" />
                   </div>
+
+                  <p
+                    className="
+                      mt-4
+                      text-[9px]
+                      uppercase
+                      tracking-[0.38em]
+                      text-[#a9979f]
+                    "
+                  >
+                    A little piece of us
+                  </p>
+
+                  <h3
+                    className="
+                      romantic-title
+                      mt-3
+                      text-2xl
+                      font-semibold
+                      tracking-tight
+                      sm:text-3xl
+                    "
+                  >
+                    {memory.title}
+                  </h3>
+
+                  <p
+                    className="
+                      mx-auto
+                      mt-4
+                      max-w-xl
+                      text-sm
+                      leading-7
+                      text-[#bcaab0]
+                      sm:text-base
+                    "
+                  >
+                    {memory.text}
+                  </p>
                 </motion.div>
-              </div>
+              </AnimatePresence>
 
-              {/* =================================================
-                  MEMORY TEXT
-              ================================================== */}
-
-              <motion.div
-                key={`${memory.image}-text`}
-                initial={{
-                  opacity: 0,
-                  y: 8,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.4,
-                }}
-                className="
-                  px-5
-                  pb-2
-                  pt-8
-                  text-center
-                  sm:px-10
-                "
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <span className="h-px w-6 bg-rose-400/20" />
-
-                  <Sparkles size={12} className="text-rose-300/60" />
-
-                  <span className="h-px w-6 bg-rose-400/20" />
-                </div>
-
-                <p
-                  className="
-                    mt-4
-                    text-[10px]
-                    uppercase
-                    tracking-[0.35em]
-                    text-zinc-600
-                  "
-                >
-                  A little memory
-                </p>
-
-                <h3
-                  className="
-                    mt-3
-                    text-2xl
-                    font-semibold
-                    tracking-tight
-                    text-white
-                    sm:text-3xl
-                  "
-                  style={{
-                    fontFamily: "var(--font-playfair)",
-                  }}
-                >
-                  {memory.title}
-                </h3>
-
-                <p
-                  className="
-                    mx-auto
-                    mt-4
-                    max-w-xl
-                    text-sm
-                    leading-7
-                    text-zinc-400
-                    sm:text-base
-                  "
-                >
-                  {memory.text}
-                </p>
-              </motion.div>
-
-              {/* =================================================
+              {/* =====================================================
                   CONTROLS
-              ================================================== */}
+              ====================================================== */}
 
               <div
                 className="
@@ -433,9 +575,11 @@ export default function Gallery({ onNext }: Props) {
                 "
               >
                 {/* Previous */}
-                <button
+                <motion.button
                   type="button"
                   onClick={previousMemory}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.92 }}
                   aria-label="Previous memory"
                   className="
                     flex
@@ -448,19 +592,18 @@ export default function Gallery({ onNext }: Props) {
                     border
                     border-white/10
                     bg-white/[0.035]
-                    text-zinc-400
+                    text-[#b9a8ae]
                     transition-all
-                    active:scale-95
-                    hover:border-rose-300/20
-                    hover:bg-rose-400/[0.06]
-                    hover:text-rose-300
+                    hover:border-[#e1a1b5]/25
+                    hover:bg-[#c87591]/[0.07]
+                    hover:text-[#e3a8b9]
                   "
                 >
-                  <ArrowLeft size={17} />
-                </button>
+                  <ArrowLeft size={17} strokeWidth={1.7} />
+                </motion.button>
 
                 {/* Dots */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   {memories.map((item, index) => (
                     <button
                       key={item.number}
@@ -469,32 +612,37 @@ export default function Gallery({ onNext }: Props) {
                       aria-label={`View memory ${index + 1}`}
                       className="
                         flex
-                        h-6
+                        h-7
                         items-center
                         justify-center
+                        px-1
                       "
                     >
-                      <span
-                        className={`
+                      <motion.span
+                        animate={{
+                          width: index === active ? 30 : 5,
+                          opacity: index === active ? 1 : 0.45,
+                        }}
+                        transition={{
+                          duration: 0.3,
+                        }}
+                        className="
                           block
+                          h-1.5
                           rounded-full
-                          transition-all
-                          duration-300
-                          ${
-                            index === active
-                              ? "h-1.5 w-8 bg-rose-400"
-                              : "h-1.5 w-1.5 bg-zinc-700"
-                          }
-                        `}
+                          bg-[#d889a2]
+                        "
                       />
                     </button>
                   ))}
                 </div>
 
                 {/* Next */}
-                <button
+                <motion.button
                   type="button"
                   onClick={nextMemory}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.92 }}
                   aria-label="Next memory"
                   className="
                     flex
@@ -507,45 +655,57 @@ export default function Gallery({ onNext }: Props) {
                     border
                     border-white/10
                     bg-white/[0.035]
-                    text-zinc-400
+                    text-[#b9a8ae]
                     transition-all
-                    active:scale-95
-                    hover:border-rose-300/20
-                    hover:bg-rose-400/[0.06]
-                    hover:text-rose-300
+                    hover:border-[#e1a1b5]/25
+                    hover:bg-[#c87591]/[0.07]
+                    hover:text-[#e3a8b9]
                   "
                 >
-                  <ArrowRight size={17} />
-                </button>
+                  <ArrowRight size={17} strokeWidth={1.7} />
+                </motion.button>
               </div>
             </motion.div>
 
             {/* Swipe hint */}
-            <motion.p
+            <motion.div
               animate={{
                 opacity: [0.25, 0.55, 0.25],
               }}
               transition={{
-                duration: 2.5,
+                duration: 2.8,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
               className="
                 mt-5
+                flex
+                items-center
+                justify-center
+                gap-2
                 text-center
-                text-[9px]
-                uppercase
-                tracking-[0.25em]
-                text-zinc-700
               "
             >
-              Swipe to see the next memory
-            </motion.p>
+              <ArrowLeft size={11} className="text-[#8f7d85]" />
+
+              <p
+                className="
+                  text-[9px]
+                  uppercase
+                  tracking-[0.28em]
+                  text-[#8f7d85]
+                "
+              >
+                Swipe through the memories
+              </p>
+
+              <ArrowRight size={11} className="text-[#8f7d85]" />
+            </motion.div>
           </div>
 
-          {/* =====================================================
-              NEXT CHAPTER
-          ====================================================== */}
+          {/* =========================================================
+              EMOTIONAL TRANSITION
+          ========================================================== */}
 
           <motion.div
             initial={{
@@ -557,48 +717,78 @@ export default function Gallery({ onNext }: Props) {
               y: 0,
             }}
             transition={{
-              duration: 0.7,
+              duration: 0.8,
               delay: 0.35,
             }}
-            className="mt-12 text-center"
+            className="mt-14 text-center sm:mt-16"
           >
-            <div className="mb-6 flex items-center justify-center gap-3">
-              <span className="h-px w-10 bg-white/10" />
+            <div className="mb-7 flex items-center justify-center gap-3">
+              <span className="h-px w-10 bg-white/[0.08]" />
 
-              <Heart size={13} className="fill-rose-400/70 text-rose-400" />
+              <Stars
+                size={13}
+                strokeWidth={1.4}
+                className="text-[#d9b49e]/60"
+              />
 
-              <span className="h-px w-10 bg-white/10" />
+              <span className="h-px w-10 bg-white/[0.08]" />
             </div>
+
+            <p
+              className="
+                romantic-title
+                mx-auto
+                max-w-xl
+                text-2xl
+                leading-relaxed
+                text-[#ead9dd]
+                sm:text-3xl
+              "
+            >
+              And somehow,
+              <br />
+              <span className="romantic-gradient">
+                you became one of those memories.
+              </span>
+            </p>
 
             <p
               className="
                 mx-auto
+                mt-5
                 max-w-md
                 text-sm
                 leading-7
-                text-zinc-500
+                text-[#aa989f]
               "
             >
-              Some moments become memories.
-              <br />
-              Some people become a part of your heart.
+              The kind I don&apos;t want to lose just because one moment went
+              wrong.
             </p>
 
-            <div className="mx-auto mt-7 w-full max-w-sm">
+            <div className="mx-auto mt-8 w-full max-w-sm">
               <Button text="One last thing" pulse onClick={onNext} />
             </div>
 
-            <p
+            <motion.p
+              animate={{
+                opacity: [0.35, 0.7, 0.35],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
               className="
                 mt-5
-                text-[10px]
+                text-[9px]
                 uppercase
-                tracking-[0.25em]
-                text-zinc-700
+                tracking-[0.3em]
+                text-[#86747c]
               "
             >
-              Keep going
-            </p>
+              There&apos;s one more thing I want you to know
+            </motion.p>
           </motion.div>
         </div>
       </div>

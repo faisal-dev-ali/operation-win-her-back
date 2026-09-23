@@ -1,27 +1,36 @@
 @import "tailwindcss";
 
-/* =========================================================
-   MIDNIGHT ROMANCE — GLOBAL THEME
-   ========================================================= */
-
 :root {
-  --background: #080609;
+  /* =========================================================
+     ROMANTIC NIGHT PALETTE
+     ========================================================= */
 
-  --surface: rgba(255, 255, 255, 0.045);
-  --surface-strong: rgba(255, 255, 255, 0.065);
+  --background: #120f15;
+  --background-soft: #1d151d;
+  --background-plum: #2b1b27;
 
-  --border: rgba(255, 190, 205, 0.1);
-  --border-soft: rgba(255, 255, 255, 0.07);
+  --surface: rgba(255, 220, 230, 0.055);
+  --surface-hover: rgba(255, 220, 230, 0.085);
 
-  --text: #fff8fa;
-  --muted: #aaa0a5;
+  --border: rgba(238, 190, 205, 0.14);
+  --border-soft: rgba(238, 190, 205, 0.07);
 
-  --rose: #fb7185;
-  --rose-light: #fda4af;
-  --rose-soft: #fecdd3;
+  --text: #fff5f1;
+  --text-soft: #ead8dc;
+  --muted: #b8a5ad;
 
-  --burgundy: #2a0d18;
-  --paper: #fff9f5;
+  --rose: #c87591;
+  --rose-light: #e2a2b5;
+  --rose-soft: #f0c4cf;
+
+  --wine: #8f4564;
+  --wine-deep: #54263e;
+
+  --champagne: #efd7c9;
+  --gold-soft: #d9b49e;
+
+  --paper: #fff8f2;
+  --paper-text: #3e2830;
 }
 
 /* =========================================================
@@ -41,37 +50,43 @@ body {
   color: var(--text);
 
   background:
+    /* candlelight behind the letter */
+    radial-gradient(
+      ellipse 45% 42% at 50% 42%,
+      rgba(205, 113, 143, 0.14),
+      transparent 72%
+    ),
     /* top romantic glow */
     radial-gradient(
-      ellipse 75% 45% at 50% -5%,
-      rgba(190, 45, 82, 0.22),
-      transparent 70%
-    ),
-    /* left rose glow */
-    radial-gradient(
-        ellipse 45% 55% at -10% 35%,
-        rgba(143, 35, 68, 0.12),
-        transparent 70%
+        ellipse 80% 45% at 50% -10%,
+        rgba(218, 137, 160, 0.2),
+        transparent 72%
       ),
-    /* right pink glow */
+    /* left wine glow */
     radial-gradient(
-        ellipse 40% 50% at 110% 60%,
-        rgba(157, 42, 78, 0.1),
-        transparent 70%
+        ellipse 45% 65% at -10% 48%,
+        rgba(112, 45, 74, 0.2),
+        transparent 72%
+      ),
+    /* right wine glow */
+    radial-gradient(
+        ellipse 45% 65% at 110% 58%,
+        rgba(115, 46, 75, 0.18),
+        transparent 72%
       ),
     /* bottom warmth */
     radial-gradient(
-        ellipse 60% 35% at 50% 105%,
-        rgba(104, 30, 55, 0.16),
+        ellipse 60% 40% at 50% 110%,
+        rgba(126, 59, 77, 0.14),
         transparent 70%
       ),
-    #080609;
+    linear-gradient(145deg, #120f15 0%, #1b141c 38%, #21161e 68%, #151016 100%);
 
   font-family: var(--font-geist-sans);
 }
 
 /* =========================================================
-   CINEMATIC LIGHT
+   VERY SOFT CENTER LIGHT
    ========================================================= */
 
 body::before {
@@ -79,20 +94,23 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-
   pointer-events: none;
 
-  background: radial-gradient(
-    circle at 50% 20%,
-    rgba(255, 120, 145, 0.045),
-    transparent 28%
-  );
-
-  opacity: 1;
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(255, 205, 218, 0.035),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(211, 144, 164, 0.025),
+      transparent 32%
+    );
 }
 
 /* =========================================================
-   SUBTLE FILM GRAIN
+   FILM GRAIN
    ========================================================= */
 
 body::after {
@@ -100,31 +118,36 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: 999;
-
   pointer-events: none;
 
-  opacity: 0.025;
+  opacity: 0.017;
 
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='.7'/%3E%3C/svg%3E");
 
   mix-blend-mode: soft-light;
 }
 
 /* =========================================================
-   BOX MODEL
+   GLOBAL
    ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
-/* =========================================================
-   SELECTION
-   ========================================================= */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
 
 ::selection {
-  background: rgba(251, 113, 133, 0.28);
-  color: #fff;
+  background: rgba(200, 117, 145, 0.3);
+  color: #fff7f4;
 }
 
 /* =========================================================
@@ -132,46 +155,40 @@ body::after {
    ========================================================= */
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080609;
+  background: #120f15;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
-  background: rgba(251, 113, 133, 0.25);
+  background: rgba(210, 127, 151, 0.32);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(251, 113, 133, 0.45);
+  background: rgba(225, 153, 173, 0.5);
 }
 
 /* =========================================================
-   MOBILE TAP
+   ROMANTIC TYPOGRAPHY
    ========================================================= */
 
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
+.romantic-title {
+  font-family: var(--font-playfair);
+  color: var(--text);
+  letter-spacing: -0.025em;
 }
-
-/* =========================================================
-   SMOOTH IMAGE RENDERING
-   ========================================================= */
-
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* =========================================================
-   ROMANTIC TEXT HELPERS
-   ========================================================= */
 
 .romantic-gradient {
-  background: linear-gradient(135deg, #fff8fa 0%, #fda4af 48%, #fb7185 100%);
+  background: linear-gradient(
+    135deg,
+    #fff5f0 0%,
+    #f0c4cf 42%,
+    #d889a2 72%,
+    #b96182 100%
+  );
 
   -webkit-background-clip: text;
   background-clip: text;
@@ -180,12 +197,12 @@ img {
 
 .romantic-glow {
   text-shadow:
-    0 0 30px rgba(251, 113, 133, 0.18),
-    0 0 70px rgba(251, 113, 133, 0.08);
+    0 0 28px rgba(211, 126, 151, 0.16),
+    0 0 65px rgba(146, 61, 91, 0.08);
 }
 
 /* =========================================================
-   GLASS EFFECT
+   GLASS
    ========================================================= */
 
 .romantic-glass {
@@ -193,20 +210,41 @@ img {
 
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.065),
-    rgba(255, 255, 255, 0.025)
+    rgba(255, 224, 232, 0.075),
+    rgba(255, 210, 225, 0.025)
   );
 
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    0 30px 80px rgba(0, 0, 0, 0.3),
+    0 0 70px rgba(119, 48, 76, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
 
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
 
 /* =========================================================
-   ROMANTIC DIVIDER
+   ROSE GLOW
+   ========================================================= */
+
+.rose-glow {
+  box-shadow:
+    0 0 55px rgba(205, 116, 145, 0.14),
+    0 25px 80px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   HEART
+   ========================================================= */
+
+.heart-glow {
+  filter: drop-shadow(0 0 7px rgba(238, 157, 180, 0.5))
+    drop-shadow(0 0 18px rgba(207, 103, 137, 0.28))
+    drop-shadow(0 0 38px rgba(150, 58, 91, 0.14));
+}
+
+/* =========================================================
+   DIVIDER
    ========================================================= */
 
 .romantic-divider {
@@ -215,16 +253,106 @@ img {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(251, 113, 133, 0.35),
+    rgba(230, 161, 181, 0.35),
+    rgba(239, 210, 199, 0.18),
     transparent
   );
 }
 
 /* =========================================================
-   FLOATING HEART GLOW
+   LOVE LETTER PAPER
    ========================================================= */
 
-.heart-glow {
-  filter: drop-shadow(0 0 12px rgba(251, 113, 133, 0.35))
-    drop-shadow(0 0 28px rgba(251, 113, 133, 0.12));
+.romantic-paper {
+  color: var(--paper-text);
+
+  background:
+    /* warm corner light */
+    radial-gradient(
+      circle at 12% 8%,
+      rgba(255, 255, 255, 0.8),
+      transparent 28%
+    ),
+    /* subtle rose warmth */
+    radial-gradient(
+        circle at 95% 85%,
+        rgba(221, 164, 164, 0.12),
+        transparent 35%
+      ),
+    linear-gradient(145deg, #fffaf6 0%, #fff5ef 42%, #f7e8e1 100%);
+
+  box-shadow:
+    0 35px 100px rgba(0, 0, 0, 0.34),
+    0 5px 20px rgba(0, 0, 0, 0.13),
+    0 0 80px rgba(194, 93, 124, 0.07);
+}
+
+/* =========================================================
+   PHOTO
+   ========================================================= */
+
+.romantic-photo {
+  border: 1px solid rgba(245, 220, 225, 0.14);
+
+  background: linear-gradient(145deg, #1c151b, #120f14);
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.34),
+    0 0 45px rgba(132, 52, 82, 0.06);
+}
+
+/* =========================================================
+   SOFT CANDLELIGHT UTILITY
+   ========================================================= */
+
+.candle-glow {
+  box-shadow:
+    0 0 20px rgba(239, 183, 165, 0.12),
+    0 0 55px rgba(205, 108, 139, 0.1),
+    0 20px 70px rgba(0, 0, 0, 0.22);
+}
+
+/* =========================================================
+   ROMANTIC BORDER
+   ========================================================= */
+
+.romantic-border {
+  border: 1px solid rgba(225, 159, 178, 0.16);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 35px rgba(194, 91, 123, 0.05);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  body {
+    background:
+      radial-gradient(
+        ellipse 100% 38% at 50% -4%,
+        rgba(218, 137, 160, 0.18),
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 80% 45% at 50% 38%,
+        rgba(186, 83, 116, 0.1),
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 70% 55% at 50% 110%,
+        rgba(126, 59, 77, 0.12),
+        transparent 72%
+      ),
+      linear-gradient(160deg, #120f15 0%, #1d141c 52%, #171117 100%);
+  }
+
+  .romantic-paper {
+    box-shadow:
+      0 28px 75px rgba(0, 0, 0, 0.34),
+      0 5px 18px rgba(0, 0, 0, 0.12),
+      0 0 55px rgba(194, 93, 124, 0.06);
+  }
 }
