@@ -1,7 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, GitCommit, Heart, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  Heart,
+  Sparkles,
+  ShieldCheck,
+  MessageCircleHeart,
+  HandHeart,
+} from "lucide-react";
 
 import Section from "../ui/Section";
 import Button from "../Button";
@@ -13,141 +19,191 @@ type Props = {
 
 const promises = [
   {
-    title: "Think before I speak",
-    description: "Especially when my words can affect someone I care about.",
+    number: "01",
+    title: "I’ll think before I speak",
+    description:
+      "I never want my careless words to become the reason you feel bad about yourself.",
     icon: ShieldCheck,
   },
   {
-    title: "Appreciate, never make you doubt",
+    number: "02",
+    title: "I’ll make sure you know how beautiful you are",
     description:
-      "If I think you're beautiful, I should make sure you hear it from me.",
+      "If I think you look beautiful, I shouldn’t leave you wondering. I should tell you.",
     icon: Heart,
   },
   {
-    title: "Listen when something hurts",
+    number: "03",
+    title: "I’ll listen when something hurts",
     description:
-      "Not defend myself. Not find excuses. Just listen and understand.",
-    icon: Sparkles,
+      "I don’t want to defend myself when you’re telling me that something hurt. I want to understand you.",
+    icon: MessageCircleHeart,
   },
   {
-    title: "Learn from my mistakes",
+    number: "04",
+    title: "I’ll learn from this",
     description:
-      "An apology means more when the same mistake doesn't keep happening.",
-    icon: GitCommit,
+      "I can’t undo what happened, but I can make sure I become better because of it.",
+    icon: HandHeart,
   },
 ];
 
 export default function Promise({ onNext }: Props) {
   return (
     <Section id="promise">
-      <div className="w-full">
-        {/* Header */}
+      <div className="relative mx-auto w-full max-w-4xl overflow-hidden">
+        {/* =====================================================
+            AMBIENT ROMANTIC LIGHT
+        ====================================================== */}
+
         <motion.div
           initial={{
             opacity: 0,
-            y: 20,
+            scale: 0.8,
           }}
-          whileInView={{
+          animate={{
             opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.4,
+            scale: 1,
           }}
           transition={{
-            duration: 0.7,
-          }}
-          className="mb-10 text-center"
-        >
-          <div className="mx-auto flex w-fit items-center gap-2 rounded-full border border-rose-400/15 bg-rose-400/5 px-4 py-2">
-            <GitCommit size={14} className="text-rose-400" />
-
-            <span className="font-mono text-xs text-zinc-400">
-              release v2.0.0
-            </span>
-          </div>
-
-          <h2 className="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            Release Notes
-          </h2>
-
-          <p className="mt-4 text-sm text-zinc-500">
-            What changed after I understood the bug.
-          </p>
-        </motion.div>
-
-        {/* Release card */}
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 30,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.25,
-          }}
-          transition={{
-            duration: 0.8,
+            duration: 1.5,
           }}
           className="
-            mx-auto
-            max-w-3xl
-            overflow-hidden
-            rounded-[2rem]
-            border
-            border-white/10
-            bg-white/[0.035]
-            shadow-2xl
-            shadow-black/20
-            backdrop-blur-xl
+            pointer-events-none
+            absolute
+            left-1/2
+            top-[35%]
+            h-[28rem]
+            w-[28rem]
+            -translate-x-1/2
+            -translate-y-1/2
+            rounded-full
+            bg-rose-500/[0.07]
+            blur-[120px]
           "
-        >
-          {/* Card header */}
-          <div className="border-b border-white/10 bg-white/[0.025] px-6 py-5 sm:px-8">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="font-mono text-xs text-zinc-600">
-                  relationship-service
-                </p>
+        />
 
-                <p className="mt-1 text-sm font-medium text-zinc-300">
-                  {SITE.yourName}
-                </p>
-              </div>
+        <div
+          className="
+            pointer-events-none
+            absolute
+            left-1/2
+            top-0
+            h-48
+            w-[80%]
+            -translate-x-1/2
+            rounded-full
+            bg-rose-400/[0.04]
+            blur-3xl
+          "
+        />
 
-              <span className="rounded-full border border-emerald-400/15 bg-emerald-400/5 px-3 py-1 text-xs text-emerald-400">
-                stable
-              </span>
+        <div className="relative z-10">
+          {/* =====================================================
+              HEADER
+          ====================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 25,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.8,
+            }}
+            className="text-center"
+          >
+            <motion.div
+              animate={{
+                y: [0, -4, 0],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="
+                mx-auto
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-rose-300/15
+                bg-rose-400/[0.06]
+                shadow-xl
+                shadow-rose-500/10
+              "
+            >
+              <Heart size={22} className="fill-rose-400 text-rose-400" />
+            </motion.div>
+
+            <div className="mt-7 flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-rose-400/25" />
+
+              <p
+                className="
+                  text-[10px]
+                  uppercase
+                  tracking-[0.4em]
+                  text-rose-300/70
+                  sm:text-xs
+                "
+              >
+                From now on
+              </p>
+
+              <span className="h-px w-8 bg-rose-400/25" />
             </div>
-          </div>
 
-          {/* Version */}
-          <div className="border-b border-white/10 px-6 py-6 sm:px-8">
-            <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-400/10">
-                <GitCommit size={18} className="text-rose-400" />
-              </div>
+            <h2
+              className="
+                mt-5
+                text-[2.7rem]
+                font-semibold
+                leading-[1.05]
+                tracking-[-0.05em]
+                text-white
+                sm:text-5xl
+              "
+              style={{
+                fontFamily: "var(--font-playfair)",
+              }}
+            >
+              What I want
+              <br />
+              <span className="text-rose-300">to do better.</span>
+            </h2>
 
-              <div>
-                <p className="font-mono text-sm text-zinc-300">
-                  v2.0.0 — communication update
-                </p>
+            <p
+              className="
+                mx-auto
+                mt-5
+                max-w-md
+                text-sm
+                leading-7
+                text-zinc-500
+                sm:text-base
+              "
+            >
+              Not because I have to.
+              <br />
+              Because you matter to me.
+            </p>
+          </motion.div>
 
-                <p className="mt-1 text-xs leading-5 text-zinc-600">
-                  Major improvements to the way I communicate with someone
-                  important to me.
-                </p>
-              </div>
-            </div>
-          </div>
+          {/* =====================================================
+              PROMISES
+          ====================================================== */}
 
-          {/* Changes */}
-          <div className="divide-y divide-white/5">
+          <div className="mt-12 space-y-4">
             {promises.map((promise, index) => {
               const Icon = promise.icon;
 
@@ -156,101 +212,364 @@ export default function Promise({ onNext }: Props) {
                   key={promise.title}
                   initial={{
                     opacity: 0,
-                    x: -15,
+                    y: 25,
                   }}
-                  whileInView={{
+                  animate={{
                     opacity: 1,
-                    x: 0,
-                  }}
-                  viewport={{
-                    once: true,
-                    amount: 0.5,
+                    y: 0,
                   }}
                   transition={{
-                    duration: 0.5,
-                    delay: index * 0.08,
+                    duration: 0.65,
+                    delay: 0.15 + index * 0.12,
+                    ease: "easeOut",
+                  }}
+                  whileHover={{
+                    y: -3,
                   }}
                   className="
-                    flex
-                    gap-4
-                    px-6
-                    py-6
-                    sm:px-8
+                    group
+                    relative
+                    overflow-hidden
+                    rounded-[1.75rem]
+                    border
+                    border-white/[0.08]
+                    bg-gradient-to-br
+                    from-white/[0.055]
+                    via-white/[0.025]
+                    to-transparent
+                    p-5
+                    shadow-xl
+                    shadow-black/10
+                    backdrop-blur-xl
+                    transition-all
+                    duration-300
+                    hover:border-rose-300/15
+                    hover:shadow-rose-950/20
+                    sm:p-6
                   "
                 >
-                  {/* Icon */}
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/5">
-                    <Icon size={17} className="text-rose-400" />
-                  </div>
+                  {/* Hover glow */}
+                  <div
+                    className="
+                      pointer-events-none
+                      absolute
+                      -right-20
+                      -top-20
+                      h-40
+                      w-40
+                      rounded-full
+                      bg-rose-400/[0.04]
+                      blur-3xl
+                      transition-all
+                      duration-500
+                      group-hover:bg-rose-400/[0.09]
+                    "
+                  />
 
-                  {/* Content */}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <Check size={14} className="text-emerald-400" />
+                  {/* Left accent */}
+                  <div
+                    className="
+                      absolute
+                      bottom-6
+                      left-0
+                      top-6
+                      w-[2px]
+                      rounded-r-full
+                      bg-rose-400/0
+                      transition-all
+                      duration-300
+                      group-hover:bg-rose-400/60
+                    "
+                  />
 
-                      <h3 className="text-sm font-medium text-zinc-200 sm:text-base">
-                        {promise.title}
-                      </h3>
+                  <div className="relative flex gap-4 sm:gap-5">
+                    {/* Number */}
+                    <div className="shrink-0">
+                      <div
+                        className="
+                          flex
+                          h-10
+                          w-10
+                          items-center
+                          justify-center
+                          rounded-full
+                          border
+                          border-white/10
+                          bg-black/10
+                          text-[11px]
+                          font-medium
+                          text-zinc-500
+                        "
+                      >
+                        {promise.number}
+                      </div>
                     </div>
 
-                    <p className="mt-2 text-sm leading-6 text-zinc-500">
-                      {promise.description}
-                    </p>
+                    {/* Content */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start gap-3">
+                        <div
+                          className="
+                            flex
+                            h-9
+                            w-9
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-xl
+                            bg-rose-400/[0.07]
+                            ring-1
+                            ring-rose-300/[0.05]
+                          "
+                        >
+                          <Icon size={17} className="text-rose-300" />
+                        </div>
+
+                        <h3
+                          className="
+                            pt-1
+                            text-sm
+                            font-medium
+                            leading-6
+                            text-zinc-100
+                            sm:text-base
+                          "
+                        >
+                          {promise.title}
+                        </h3>
+                      </div>
+
+                      <p
+                        className="
+                          mt-4
+                          text-sm
+                          leading-7
+                          text-zinc-500
+                          sm:pr-4
+                        "
+                      >
+                        {promise.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               );
             })}
           </div>
 
-          {/* Known bugs */}
-          <div className="border-t border-white/10 bg-white/[0.02] px-6 py-6 sm:px-8">
-            <div className="flex items-start gap-3">
-              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-400/10">
-                <Check size={14} className="text-emerald-400" />
+          {/* =====================================================
+              HEARTFELT PROMISE
+          ====================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+              scale: 0.98,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            transition={{
+              duration: 0.9,
+              delay: 0.75,
+            }}
+            className="
+              relative
+              mt-10
+              overflow-hidden
+              rounded-[2rem]
+              border
+              border-rose-300/10
+              bg-gradient-to-br
+              from-rose-400/[0.08]
+              via-white/[0.035]
+              to-transparent
+              px-6
+              py-10
+              text-center
+              shadow-2xl
+              shadow-black/20
+              backdrop-blur-xl
+              sm:px-10
+              sm:py-12
+            "
+          >
+            {/* Card glow */}
+            <div
+              className="
+                pointer-events-none
+                absolute
+                left-1/2
+                top-0
+                h-40
+                w-72
+                -translate-x-1/2
+                rounded-full
+                bg-rose-400/[0.06]
+                blur-3xl
+              "
+            />
+
+            <div className="relative">
+              <motion.div
+                animate={{
+                  scale: [1, 1.08, 1],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="
+                  mx-auto
+                  flex
+                  h-10
+                  w-10
+                  items-center
+                  justify-center
+                  rounded-full
+                  bg-rose-400/[0.07]
+                "
+              >
+                <Sparkles size={17} className="text-rose-300" />
+              </motion.div>
+
+              <p
+                className="
+                  mx-auto
+                  mt-6
+                  max-w-lg
+                  text-xl
+                  font-medium
+                  leading-8
+                  tracking-tight
+                  text-zinc-100
+                  sm:text-2xl
+                "
+              >
+                I don&apos;t promise
+                <br className="sm:hidden" />
+                that I&apos;ll always be perfect.
+              </p>
+
+              <p
+                className="
+                  mx-auto
+                  mt-4
+                  max-w-md
+                  text-sm
+                  leading-7
+                  text-zinc-500
+                  sm:text-base
+                "
+              >
+                I promise that I&apos;ll always try
+                <br className="hidden sm:block" />
+                to be better with your heart.
+              </p>
+
+              <div className="mt-7 flex items-center justify-center gap-3">
+                <span className="h-px w-12 bg-white/10" />
+
+                <motion.div
+                  animate={{
+                    scale: [1, 1.15, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                >
+                  <Heart size={13} className="fill-rose-400 text-rose-400" />
+                </motion.div>
+
+                <span className="h-px w-12 bg-white/10" />
               </div>
 
-              <div>
-                <p className="text-sm font-medium text-zinc-300">Known bugs</p>
-
-                <p className="mt-1 text-sm leading-6 text-zinc-600">
-                  Still human. Still imperfect. But willing to understand,
-                  improve, and do better.
-                </p>
-              </div>
+              <p
+                className="
+                  mt-6
+                  text-sm
+                  text-zinc-600
+                "
+                style={{
+                  fontFamily: "Georgia, 'Times New Roman', serif",
+                }}
+              >
+                — {SITE.yourName}
+              </p>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Final transition */}
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          whileInView={{
-            opacity: 1,
-            y: 0,
-          }}
-          viewport={{
-            once: true,
-            amount: 0.5,
-          }}
-          transition={{
-            duration: 0.7,
-            delay: 0.2,
-          }}
-          className="mt-12 text-center"
-        >
-          <p className="mx-auto max-w-md text-sm leading-7 text-zinc-500">
-            I don&apos;t expect a version update to erase what happened.
-            <br />I just want you to know that I understood it.
-          </p>
+          {/* =====================================================
+              FINAL TRANSITION
+          ====================================================== */}
 
-          {/* Next section CTA */}
-          <div className="mx-auto mt-7 w-full max-w-sm">
-            <Button text="One last message" pulse onClick={onNext} />
-          </div>
-        </motion.div>
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.8,
+              delay: 1,
+            }}
+            className="mt-12 text-center"
+          >
+            <div className="mb-7 flex items-center justify-center gap-3">
+              <span className="h-px w-10 bg-white/10" />
+
+              <Heart size={12} className="fill-rose-400/70 text-rose-400" />
+
+              <span className="h-px w-10 bg-white/10" />
+            </div>
+
+            <p
+              className="
+                mx-auto
+                max-w-md
+                text-sm
+                leading-7
+                text-zinc-500
+              "
+            >
+              I know words alone aren&apos;t enough.
+              <br />
+              So there&apos;s just one last thing I want to say.
+            </p>
+
+            <div className="mx-auto mt-8 w-full max-w-sm">
+              <Button text="One last thing" pulse onClick={onNext} />
+            </div>
+
+            <motion.p
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="
+                mt-6
+                text-[10px]
+                uppercase
+                tracking-[0.3em]
+                text-zinc-700
+              "
+            >
+              From my heart
+            </motion.p>
+          </motion.div>
+        </div>
       </div>
     </Section>
   );

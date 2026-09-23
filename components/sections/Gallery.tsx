@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Heart,
-  Image as ImageIcon,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 import Section from "../ui/Section";
@@ -41,7 +35,7 @@ const memories = [
     number: "04",
     title: "What I should have said",
     text: "You looked beautiful. I should have said that. Clearly. Kindly. Without making you question it.",
-    image: "/memories/memory-04.jpg",
+    image: "/memories/memory-04.JPG",
   },
 ];
 
@@ -60,267 +54,385 @@ export default function Gallery({ onNext }: Props) {
 
   return (
     <Section id="gallery">
-      <div className="w-full">
-        {/* ================================= */}
-        {/* HEADER */}
-        {/* ================================= */}
+      <div className="relative w-full overflow-hidden">
+        {/* =====================================================
+            BACKGROUND
+        ====================================================== */}
 
         <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
           animate={{
-            opacity: 1,
-            y: 0,
+            scale: [1, 1.08, 1],
+            opacity: [0.35, 0.6, 0.35],
           }}
           transition={{
-            duration: 0.7,
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
-          className="mb-10 text-center"
-        >
+          className="
+            pointer-events-none
+            absolute
+            left-1/2
+            top-1/3
+            h-[28rem]
+            w-[28rem]
+            -translate-x-1/2
+            -translate-y-1/2
+            rounded-full
+            bg-rose-500/[0.07]
+            blur-[120px]
+          "
+        />
+
+        <div className="relative z-10">
+          {/* =====================================================
+              HEADER
+          ====================================================== */}
+
           <motion.div
-            animate={{
-              y: [0, -3, 0],
-              rotate: [0, 2, -2, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="
-              mx-auto
-              flex
-              h-11
-              w-11
-              items-center
-              justify-center
-              rounded-2xl
-              border
-              border-rose-400/15
-              bg-rose-400/5
-            "
-          >
-            <Sparkles size={18} className="text-rose-300" />
-          </motion.div>
-
-          <p className="mt-5 text-[10px] uppercase tracking-[0.4em] text-rose-400">
-            Memories
-          </p>
-
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            The things I don&apos;t want
-            <br />
-            to forget.
-          </h2>
-
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-zinc-500 sm:text-base">
-            Not everything important needs a photograph.
-            <br className="hidden sm:block" />
-            Some memories live in the way someone makes you feel.
-          </p>
-        </motion.div>
-
-        {/* ================================= */}
-        {/* MEMORY CARD */}
-        {/* ================================= */}
-
-        <div className="mx-auto max-w-3xl">
-          <motion.div
-            key={memory.number}
             initial={{
               opacity: 0,
-              x: 30,
+              y: 25,
             }}
             animate={{
               opacity: 1,
-              x: 0,
+              y: 0,
             }}
             transition={{
-              duration: 0.45,
-              ease: "easeOut",
+              duration: 0.8,
             }}
-            drag="x"
-            dragConstraints={{
-              left: 0,
-              right: 0,
-            }}
-            dragElastic={0.18}
-            onDragEnd={(_, info) => {
-              if (info.offset.x < -60) {
-                nextMemory();
-              }
-
-              if (info.offset.x > 60) {
-                previousMemory();
-              }
-            }}
-            className="
-              relative
-              overflow-hidden
-              rounded-[2rem]
-              border
-              border-white/10
-              bg-white/[0.035]
-              shadow-2xl
-              shadow-black/30
-              backdrop-blur-xl
-            "
+            className="mx-auto max-w-2xl text-center"
           >
-            {/* Background glow */}
-
-            <div
+            <motion.div
+              animate={{
+                scale: [1, 1.06, 1],
+                rotate: [0, 3, -3, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
               className="
-                pointer-events-none
-                absolute
-                -right-24
-                -top-24
-                h-72
-                w-72
+                mx-auto
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
                 rounded-full
-                bg-rose-500/10
-                blur-3xl
+                border
+                border-rose-300/15
+                bg-rose-400/[0.06]
+                shadow-lg
+                shadow-rose-500/10
               "
-            />
+            >
+              <Heart size={21} className="fill-rose-400 text-rose-400" />
+            </motion.div>
 
-            <div
+            <div className="mt-7 flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-rose-400/25" />
+
+              <p
+                className="
+                  text-[10px]
+                  uppercase
+                  tracking-[0.4em]
+                  text-rose-300/70
+                  sm:text-xs
+                "
+              >
+                Our little memories
+              </p>
+
+              <span className="h-px w-8 bg-rose-400/25" />
+            </div>
+
+            <h2
               className="
-                pointer-events-none
-                absolute
-                -bottom-24
-                -left-24
-                h-72
-                w-72
-                rounded-full
-                bg-pink-500/5
-                blur-3xl
+                mt-5
+                text-4xl
+                font-semibold
+                leading-[1.08]
+                tracking-[-0.045em]
+                text-white
+                sm:text-5xl
               "
-            />
+              style={{
+                fontFamily: "var(--font-playfair)",
+              }}
+            >
+              The things I don&apos;t want
+              <br />
+              <span className="text-rose-300">to forget.</span>
+            </h2>
 
-            <div className="relative">
-              {/* ================================= */}
-              {/* TOP BAR */}
-              {/* ================================= */}
+            <p
+              className="
+                mx-auto
+                mt-5
+                max-w-lg
+                text-sm
+                leading-7
+                text-zinc-500
+                sm:text-base
+              "
+            >
+              Not everything important needs a photograph.
+              <br className="hidden sm:block" />
+              Some memories live in the way someone makes you feel.
+            </p>
+          </motion.div>
 
-              <div className="flex items-center justify-between px-6 pt-6 sm:px-10 sm:pt-8">
-                <span className="font-mono text-[11px] tracking-wider text-zinc-600">
-                  MEMORY_{memory.number}
-                </span>
+          {/* =====================================================
+              PHOTO CARD
+          ====================================================== */}
 
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-700">
-                    {String(active + 1).padStart(2, "0")} /{" "}
-                    {String(memories.length).padStart(2, "0")}
-                  </span>
+          <div className="mx-auto mt-10 w-full max-w-3xl sm:mt-12">
+            <motion.div
+              key={memory.image}
+              initial={{
+                opacity: 0,
+                y: 18,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeOut",
+              }}
+              drag="x"
+              dragConstraints={{
+                left: 0,
+                right: 0,
+              }}
+              dragElastic={0.12}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -70) {
+                  nextMemory();
+                }
 
-                  <Heart size={17} className="fill-rose-400/20 text-rose-400" />
-                </div>
-              </div>
+                if (info.offset.x > 70) {
+                  previousMemory();
+                }
+              }}
+              className="
+                overflow-hidden
+                rounded-[2rem]
+                border
+                border-white/[0.08]
+                bg-white/[0.025]
+                p-2
+                shadow-2xl
+                shadow-black/30
+                backdrop-blur-xl
+                sm:p-3
+              "
+            >
+              {/* =================================================
+                  PHOTO
+              ================================================== */}
 
-              {/* ================================= */}
-              {/* IMAGE */}
-              {/* ================================= */}
-
-              <div className="px-5 pt-6 sm:px-8 sm:pt-8">
+              <div
+                className="
+    relative
+    w-full
+    overflow-hidden
+    rounded-[1.5rem]
+    bg-[#0b090b]
+  "
+              >
                 <motion.div
                   key={memory.image}
                   initial={{
                     opacity: 0,
-                    scale: 0.97,
+                    scale: 0.98,
                   }}
                   animate={{
                     opacity: 1,
                     scale: 1,
                   }}
                   transition={{
-                    duration: 0.45,
+                    duration: 0.5,
                     ease: "easeOut",
                   }}
-                  className="
-      relative
-      flex
-      h-[360px]
-      w-full
-      items-center
-      justify-center
-      overflow-hidden
-      rounded-[1.5rem]
-      border
-      border-white/10
-      bg-black/20
-      sm:h-[460px]
-      md:h-[520px]
-    "
+                  className="relative w-full"
                 >
                   <Image
                     src={memory.image}
                     alt={memory.title}
-                    fill
-                    sizes="(max-width: 640px) 90vw, 700px"
+                    width={1200}
+                    height={1600}
+                    sizes="(max-width: 640px) 92vw, 720px"
                     className="
+        block
+        h-auto
+        w-full
         object-contain
-        p-2
-        sm:p-3
       "
                     priority={active === 0}
                   />
 
-                  {/* subtle overlay */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/5" />
+                  {/* Very subtle cinematic shade */}
+                  <div
+                    className="
+        pointer-events-none
+        absolute
+        inset-0
+        bg-gradient-to-t
+        from-black/20
+        via-transparent
+        to-transparent
+      "
+                  />
 
-                  {/* top-right heart */}
+                  {/* Heart */}
                   <motion.div
                     animate={{
                       scale: [1, 1.08, 1],
                     }}
                     transition={{
-                      duration: 2.2,
+                      duration: 2.5,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
-                    className="absolute right-4 top-4"
+                    className="
+        absolute
+        right-4
+        top-4
+        flex
+        h-10
+        w-10
+        items-center
+        justify-center
+        rounded-full
+        border
+        border-white/15
+        bg-black/30
+        backdrop-blur-md
+      "
                   >
-                    <Heart
-                      size={19}
-                      className="fill-white/80 text-white/80 drop-shadow-lg"
-                    />
+                    <Heart size={17} className="fill-white text-white" />
                   </motion.div>
 
-                  {/* bottom label */}
+                  {/* Caption */}
                   <div className="absolute bottom-4 left-4">
-                    <span className="rounded-full border border-white/15 bg-black/30 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/70 backdrop-blur-md">
+                    <span
+                      className="
+          rounded-full
+          border
+          border-white/15
+          bg-black/35
+          px-3
+          py-1.5
+          text-[9px]
+          uppercase
+          tracking-[0.2em]
+          text-white/75
+          backdrop-blur-md
+        "
+                    >
                       A moment worth keeping
                     </span>
                   </div>
                 </motion.div>
               </div>
 
-              {/* ================================= */}
-              {/* MEMORY TEXT */}
-              {/* ================================= */}
+              {/* =================================================
+                  MEMORY TEXT
+              ================================================== */}
 
-              <div className="px-6 pb-2 pt-8 text-center sm:px-10">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-zinc-600">
-                  Some things stay
+              <motion.div
+                key={`${memory.image}-text`}
+                initial={{
+                  opacity: 0,
+                  y: 8,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                transition={{
+                  duration: 0.4,
+                }}
+                className="
+                  px-5
+                  pb-2
+                  pt-8
+                  text-center
+                  sm:px-10
+                "
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <span className="h-px w-6 bg-rose-400/20" />
+
+                  <Sparkles size={12} className="text-rose-300/60" />
+
+                  <span className="h-px w-6 bg-rose-400/20" />
+                </div>
+
+                <p
+                  className="
+                    mt-4
+                    text-[10px]
+                    uppercase
+                    tracking-[0.35em]
+                    text-zinc-600
+                  "
+                >
+                  A little memory
                 </p>
 
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+                <h3
+                  className="
+                    mt-3
+                    text-2xl
+                    font-semibold
+                    tracking-tight
+                    text-white
+                    sm:text-3xl
+                  "
+                  style={{
+                    fontFamily: "var(--font-playfair)",
+                  }}
+                >
                   {memory.title}
                 </h3>
 
-                <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-zinc-400 sm:text-base">
+                <p
+                  className="
+                    mx-auto
+                    mt-4
+                    max-w-xl
+                    text-sm
+                    leading-7
+                    text-zinc-400
+                    sm:text-base
+                  "
+                >
                   {memory.text}
                 </p>
-              </div>
+              </motion.div>
 
-              {/* ================================= */}
-              {/* CONTROLS */}
-              {/* ================================= */}
+              {/* =================================================
+                  CONTROLS
+              ================================================== */}
 
-              <div className="flex items-center justify-between px-6 pb-7 pt-7 sm:px-10">
+              <div
+                className="
+                  flex
+                  items-center
+                  justify-between
+                  px-4
+                  pb-5
+                  pt-7
+                  sm:px-8
+                "
+              >
                 {/* Previous */}
-
                 <button
                   type="button"
                   onClick={previousMemory}
@@ -332,46 +444,54 @@ export default function Gallery({ onNext }: Props) {
                     shrink-0
                     items-center
                     justify-center
-                    rounded-xl
+                    rounded-full
                     border
                     border-white/10
-                    bg-white/5
+                    bg-white/[0.035]
                     text-zinc-400
-                    transition
-                    hover:bg-white/10
-                    hover:text-white
+                    transition-all
                     active:scale-95
+                    hover:border-rose-300/20
+                    hover:bg-rose-400/[0.06]
+                    hover:text-rose-300
                   "
                 >
                   <ArrowLeft size={17} />
                 </button>
 
                 {/* Dots */}
-
                 <div className="flex items-center gap-2">
                   {memories.map((item, index) => (
                     <button
-                      type="button"
                       key={item.number}
+                      type="button"
                       onClick={() => setActive(index)}
-                      aria-label={`Go to memory ${index + 1}`}
-                      className={`
-                        h-1.5
-                        rounded-full
-                        transition-all
-                        duration-300
-                        ${
-                          index === active
-                            ? "w-7 bg-rose-400"
-                            : "w-1.5 bg-zinc-700 hover:bg-zinc-500"
-                        }
-                      `}
-                    />
+                      aria-label={`View memory ${index + 1}`}
+                      className="
+                        flex
+                        h-6
+                        items-center
+                        justify-center
+                      "
+                    >
+                      <span
+                        className={`
+                          block
+                          rounded-full
+                          transition-all
+                          duration-300
+                          ${
+                            index === active
+                              ? "h-1.5 w-8 bg-rose-400"
+                              : "h-1.5 w-1.5 bg-zinc-700"
+                          }
+                        `}
+                      />
+                    </button>
                   ))}
                 </div>
 
                 {/* Next */}
-
                 <button
                   type="button"
                   onClick={nextMemory}
@@ -383,76 +503,104 @@ export default function Gallery({ onNext }: Props) {
                     shrink-0
                     items-center
                     justify-center
-                    rounded-xl
+                    rounded-full
                     border
                     border-white/10
-                    bg-white/5
+                    bg-white/[0.035]
                     text-zinc-400
-                    transition
-                    hover:bg-white/10
-                    hover:text-white
+                    transition-all
                     active:scale-95
+                    hover:border-rose-300/20
+                    hover:bg-rose-400/[0.06]
+                    hover:text-rose-300
                   "
                 >
                   <ArrowRight size={17} />
                 </button>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Swipe hint */}
+            {/* Swipe hint */}
+            <motion.p
+              animate={{
+                opacity: [0.25, 0.55, 0.25],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="
+                mt-5
+                text-center
+                text-[9px]
+                uppercase
+                tracking-[0.25em]
+                text-zinc-700
+              "
+            >
+              Swipe to see the next memory
+            </motion.p>
+          </div>
 
-          <motion.p
+          {/* =====================================================
+              NEXT CHAPTER
+          ====================================================== */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
             animate={{
-              opacity: [0.45, 0.8, 0.45],
+              opacity: 1,
+              y: 0,
             }}
             transition={{
-              duration: 2.5,
-              repeat: Infinity,
+              duration: 0.7,
+              delay: 0.35,
             }}
-            className="mt-5 text-center text-[11px] text-zinc-600"
+            className="mt-12 text-center"
           >
-            Swipe the memory or use the arrows
-          </motion.p>
+            <div className="mb-6 flex items-center justify-center gap-3">
+              <span className="h-px w-10 bg-white/10" />
+
+              <Heart size={13} className="fill-rose-400/70 text-rose-400" />
+
+              <span className="h-px w-10 bg-white/10" />
+            </div>
+
+            <p
+              className="
+                mx-auto
+                max-w-md
+                text-sm
+                leading-7
+                text-zinc-500
+              "
+            >
+              Some moments become memories.
+              <br />
+              Some people become a part of your heart.
+            </p>
+
+            <div className="mx-auto mt-7 w-full max-w-sm">
+              <Button text="One last thing" pulse onClick={onNext} />
+            </div>
+
+            <p
+              className="
+                mt-5
+                text-[10px]
+                uppercase
+                tracking-[0.25em]
+                text-zinc-700
+              "
+            >
+              Keep going
+            </p>
+          </motion.div>
         </div>
-
-        {/* ================================= */}
-        {/* TRANSITION */}
-        {/* ================================= */}
-
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.6,
-            delay: 0.2,
-          }}
-          className="mt-12 text-center"
-        >
-          <div className="mx-auto mb-6 flex items-center justify-center gap-3">
-            <span className="h-px w-10 bg-white/10" />
-
-            <Heart size={13} className="fill-rose-400/70 text-rose-400" />
-
-            <span className="h-px w-10 bg-white/10" />
-          </div>
-
-          <p className="mb-5 text-sm leading-7 text-zinc-500">
-            And if there&apos;s one thing I want to remember...
-            <br />
-            it&apos;s how I should have treated your heart.
-          </p>
-
-          <div className="mx-auto w-full max-w-sm">
-            <Button text="One last thing" pulse onClick={onNext} />
-          </div>
-        </motion.div>
       </div>
     </Section>
   );

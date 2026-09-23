@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, Sparkles, CircleCheck } from "lucide-react";
+import { Check, Heart, Sparkles } from "lucide-react";
 
 import Section from "../ui/Section";
 import Button from "../Button";
@@ -16,6 +16,57 @@ const moments = [
   "I said something without thinking enough about how it might make you feel.",
   "Then I realised that my words had hurt someone who never deserved that from me.",
   "And that is when I understood what I had actually done.",
+];
+
+const petals = [
+  {
+    left: "8%",
+    top: "16%",
+    size: 13,
+    rotate: -25,
+    duration: 7,
+    delay: 0,
+  },
+  {
+    left: "88%",
+    top: "12%",
+    size: 10,
+    rotate: 35,
+    duration: 8,
+    delay: 1,
+  },
+  {
+    left: "15%",
+    top: "55%",
+    size: 9,
+    rotate: 60,
+    duration: 9,
+    delay: 2,
+  },
+  {
+    left: "91%",
+    top: "62%",
+    size: 14,
+    rotate: -40,
+    duration: 8,
+    delay: 0.5,
+  },
+  {
+    left: "5%",
+    top: "78%",
+    size: 8,
+    rotate: 25,
+    duration: 10,
+    delay: 3,
+  },
+  {
+    left: "94%",
+    top: "82%",
+    size: 9,
+    rotate: -20,
+    duration: 9,
+    delay: 1.5,
+  },
 ];
 
 export default function Terminal({ onNext }: Props) {
@@ -40,106 +91,123 @@ export default function Terminal({ onNext }: Props) {
 
   return (
     <Section id="terminal">
-      <div className="relative mx-auto w-full max-w-3xl text-center">
-        {/* Soft romantic glow */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2 }}
-          className="
-            pointer-events-none
-            absolute
-            left-1/2
-            top-1/2
-            h-80
-            w-80
-            -translate-x-1/2
-            -translate-y-1/2
-            rounded-full
-            bg-rose-500/10
-            blur-[110px]
-          "
-        />
+      <div className="relative w-full overflow-hidden">
+        {/* ================================================= */}
+        {/* ROMANTIC BACKGROUND */}
+        {/* ================================================= */}
 
-        <div className="relative z-10">
-          {/* Heading */}
+        <div className="pointer-events-none absolute inset-0">
+          {/* Main glow */}
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.8,
-            }}
-          >
-            <div
-              className="
-                mx-auto
-                flex
-                h-12
-                w-12
-                items-center
-                justify-center
-                rounded-2xl
-                border
-                border-rose-400/15
-                bg-rose-400/5
-              "
-            >
-              <Heart size={20} className="fill-rose-400 text-rose-400" />
-            </div>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2 }}
+            className="
+              absolute
+              left-1/2
+              top-[22%]
+              h-[30rem]
+              w-[30rem]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-rose-600/[0.08]
+              blur-[120px]
+            "
+          />
 
-            <p
-              className="
-                mt-6
-                text-[10px]
-                uppercase
-                tracking-[0.35em]
-                text-rose-300/70
-                sm:text-xs
-              "
-            >
-              Then I realised
-            </p>
+          {/* Top warm light */}
+          <div
+            className="
+              absolute
+              left-1/2
+              top-0
+              h-72
+              w-[90%]
+              -translate-x-1/2
+              rounded-full
+              bg-gradient-to-b
+              from-rose-500/[0.07]
+              to-transparent
+              blur-3xl
+            "
+          />
 
-            <h2
-              className="
-                mt-4
-                text-4xl
-                font-semibold
-                leading-tight
-                tracking-tight
-                text-white
-                sm:text-5xl
-              "
-            >
-              What I had
-              <br />
-              <span className="text-rose-400">actually done.</span>
-            </h2>
+          {/* Side glow */}
+          <div
+            className="
+              absolute
+              -left-32
+              top-[40%]
+              h-72
+              w-72
+              rounded-full
+              bg-pink-500/[0.04]
+              blur-[100px]
+            "
+          />
 
-            <p
-              className="
-                mx-auto
-                mt-5
-                max-w-md
-                text-sm
-                leading-7
-                text-zinc-500
-                sm:text-base
-              "
-            >
-              Sometimes it takes a moment of silence
-              <br className="hidden sm:block" />
-              to realise how much your words can mean.
-            </p>
-          </motion.div>
+          <div
+            className="
+              absolute
+              -right-32
+              top-[55%]
+              h-72
+              w-72
+              rounded-full
+              bg-rose-500/[0.04]
+              blur-[100px]
+            "
+          />
 
-          {/* Realisation card */}
+          {/* Floating petals */}
+          {petals.map((petal, index) => (
+            <motion.div
+              key={index}
+              initial={{
+                opacity: 0,
+                y: 0,
+                rotate: petal.rotate,
+              }}
+              animate={{
+                opacity: [0.15, 0.55, 0.15],
+                y: [0, -18, 0],
+                rotate: [petal.rotate, petal.rotate + 20, petal.rotate - 10],
+              }}
+              transition={{
+                duration: petal.duration,
+                delay: petal.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute"
+              style={{
+                left: petal.left,
+                top: petal.top,
+              }}
+            >
+              <div
+                className="
+                  rounded-[100%_0_100%_0]
+                  bg-gradient-to-br
+                  from-rose-300/50
+                  to-rose-600/10
+                  blur-[0.3px]
+                "
+                style={{
+                  width: petal.size,
+                  height: petal.size * 0.65,
+                }}
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="relative z-10 mx-auto w-full max-w-4xl">
+          {/* ================================================= */}
+          {/* HEADER */}
+          {/* ================================================= */}
+
           <motion.div
             initial={{
               opacity: 0,
@@ -150,179 +218,421 @@ export default function Terminal({ onNext }: Props) {
               y: 0,
             }}
             transition={{
-              duration: 0.8,
-              delay: 0.25,
+              duration: 0.9,
+            }}
+            className="text-center"
+          >
+            {/* Heart */}
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.6,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              transition={{
+                duration: 0.8,
+              }}
+              className="
+                mx-auto
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-2xl
+                border
+                border-rose-300/20
+                bg-rose-400/[0.07]
+                shadow-lg
+                shadow-rose-500/10
+              "
+            >
+              <motion.div
+                animate={{
+                  scale: [1, 1.1, 1],
+                }}
+                transition={{
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              >
+                <Heart size={22} className="fill-rose-400 text-rose-400" />
+              </motion.div>
+            </motion.div>
+
+            {/* Label */}
+            <div className="mt-7 flex items-center justify-center gap-3">
+              <span className="h-px w-8 bg-rose-400/30" />
+
+              <p
+                className="
+                  text-[10px]
+                  uppercase
+                  tracking-[0.4em]
+                  text-rose-300/80
+                  sm:text-xs
+                "
+              >
+                Then I realised
+              </p>
+
+              <span className="h-px w-8 bg-rose-400/30" />
+            </div>
+
+            {/* Heading */}
+            <h2
+              className="
+                mt-5
+                text-[2.9rem]
+                font-semibold
+                leading-[1.02]
+                tracking-[-0.055em]
+                text-white
+                sm:text-6xl
+              "
+            >
+              What I had
+              <br />
+              <span className="text-rose-300">actually done.</span>
+            </h2>
+
+            {/* Decorative heart */}
+            <div className="mt-5 flex items-center justify-center">
+              <div className="relative flex items-center gap-2">
+                <span className="h-px w-10 bg-gradient-to-r from-transparent to-rose-400/50" />
+
+                <Heart size={15} className="fill-rose-400/20 text-rose-300" />
+
+                <span className="h-px w-10 bg-gradient-to-l from-transparent to-rose-400/50" />
+              </div>
+            </div>
+
+            {/* Subtitle */}
+            <p
+              className="
+                mx-auto
+                mt-6
+                max-w-md
+                text-sm
+                leading-7
+                text-zinc-500
+                sm:text-base
+                sm:leading-8
+              "
+            >
+              Sometimes it takes a moment of silence
+              <br className="hidden sm:block" />
+              to realise how much your words can mean.
+            </p>
+          </motion.div>
+
+          {/* ================================================= */}
+          {/* REALISATION CARD */}
+          {/* ================================================= */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 35,
+              scale: 0.98,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            transition={{
+              duration: 0.9,
+              delay: 0.3,
             }}
             className="
-              mt-10
+              relative
+              mx-auto
+              mt-12
+              max-w-3xl
               overflow-hidden
               rounded-[2rem]
               border
-              border-white/10
-              bg-white/[0.035]
-              p-6
-              text-left
+              border-rose-300/10
+              bg-gradient-to-br
+              from-white/[0.055]
+              via-white/[0.025]
+              to-rose-500/[0.025]
+              p-1
               shadow-2xl
-              shadow-black/20
-              backdrop-blur-xl
-              sm:p-8
+              shadow-black/30
+              backdrop-blur-2xl
             "
           >
-            {/* Card header */}
+            {/* Inner card */}
             <div
               className="
-                flex
-                items-center
-                justify-between
-                border-b
-                border-white/10
-                pb-5
+                relative
+                overflow-hidden
+                rounded-[1.8rem]
+                bg-black/20
               "
             >
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-rose-400" />
-
-                <span
-                  className="
-                    text-[10px]
-                    uppercase
-                    tracking-[0.25em]
-                    text-zinc-500
-                  "
-                >
-                  What was going through my mind
-                </span>
-              </div>
-
-              <Sparkles size={15} className="text-rose-400/60" />
-            </div>
-
-            {/* Moments */}
-            <div className="mt-7 space-y-7">
-              {moments.slice(0, visible).map((moment, index) => (
-                <motion.div
-                  key={moment}
-                  initial={{
-                    opacity: 0,
-                    y: 15,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  transition={{
-                    duration: 0.6,
-                  }}
-                  className="flex gap-4"
-                >
-                  {/* Number */}
-                  <div className="relative flex shrink-0 justify-center">
-                    <div
-                      className="
-                        flex
-                        h-8
-                        w-8
-                        items-center
-                        justify-center
-                        rounded-full
-                        border
-                        border-white/10
-                        bg-white/5
-                      "
-                    >
-                      <span className="text-[10px] text-zinc-500">
-                        0{index + 1}
-                      </span>
-                    </div>
-
-                    {index < moments.length - 1 && (
-                      <div
-                        className="
-                          absolute
-                          top-9
-                          h-[calc(100%+28px)]
-                          w-px
-                          bg-white/10
-                        "
-                      />
-                    )}
-                  </div>
-
-                  {/* Text */}
-                  <p
-                    className="
-                      pt-1
-                      text-sm
-                      leading-7
-                      text-zinc-400
-                      sm:text-base
-                      sm:leading-8
-                    "
-                  >
-                    {moment}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Final realisation */}
-            {finished && (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 20,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.8,
-                }}
+              {/* Card glow */}
+              <div
                 className="
-                  mt-8
-                  rounded-2xl
-                  border
-                  border-rose-400/10
-                  bg-rose-400/[0.04]
-                  p-5
-                  text-center
-                  sm:p-7
+                  pointer-events-none
+                  absolute
+                  left-1/2
+                  top-0
+                  h-48
+                  w-96
+                  -translate-x-1/2
+                  rounded-full
+                  bg-rose-500/[0.05]
+                  blur-3xl
+                "
+              />
+
+              {/* Card header */}
+              <div
+                className="
+                  relative
+                  flex
+                  items-center
+                  justify-between
+                  border-b
+                  border-white/[0.08]
+                  px-6
+                  py-5
+                  sm:px-8
                 "
               >
-                <CircleCheck size={20} className="mx-auto text-rose-400" />
+                <div className="flex items-center gap-3">
+                  <motion.span
+                    animate={{
+                      opacity: [1, 0.45, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                    }}
+                    className="
+                      h-2
+                      w-2
+                      rounded-full
+                      bg-rose-400
+                      shadow-sm
+                      shadow-rose-400
+                    "
+                  />
 
-                <p
-                  className="
-                    mt-4
-                    text-base
-                    font-medium
-                    leading-7
-                    text-zinc-200
-                    sm:text-lg
-                  "
-                >
-                  It wasn&apos;t you.
-                  <br />
-                  It wasn&apos;t your pictures.
-                </p>
+                  <span
+                    className="
+                      text-[10px]
+                      uppercase
+                      tracking-[0.3em]
+                      text-zinc-500
+                      sm:text-xs
+                    "
+                  >
+                    What was going through my mind
+                  </span>
+                </div>
 
-                <p
-                  className="
-                    mt-4
-                    text-sm
-                    leading-7
-                    text-rose-300
-                    sm:text-base
-                  "
-                >
-                  It was the way I chose to express myself.
-                </p>
-              </motion.div>
-            )}
+                <Sparkles size={16} className="text-rose-300/60" />
+              </div>
+
+              {/* Moments */}
+              <div className="relative px-6 py-7 sm:px-8 sm:py-9">
+                <div className="space-y-8">
+                  {moments.slice(0, visible).map((moment, index) => (
+                    <motion.div
+                      key={moment}
+                      initial={{
+                        opacity: 0,
+                        x: -15,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      transition={{
+                        duration: 0.65,
+                      }}
+                      className="relative flex gap-4 sm:gap-5"
+                    >
+                      {/* Timeline */}
+                      <div className="relative flex shrink-0 justify-center">
+                        <motion.div
+                          initial={{
+                            scale: 0.7,
+                          }}
+                          animate={{
+                            scale: 1,
+                          }}
+                          className="
+                              relative
+                              z-10
+                              flex
+                              h-9
+                              w-9
+                              items-center
+                              justify-center
+                              rounded-full
+                              border
+                              border-rose-300/20
+                              bg-rose-400/[0.05]
+                            "
+                        >
+                          <span className="text-[10px] text-rose-300/70">
+                            0{index + 1}
+                          </span>
+                        </motion.div>
+
+                        {index < moments.length - 1 && (
+                          <div
+                            className="
+                                absolute
+                                top-10
+                                h-[calc(100%+30px)]
+                                w-px
+                                bg-gradient-to-b
+                                from-rose-400/25
+                                to-transparent
+                              "
+                          />
+                        )}
+                      </div>
+
+                      {/* Text */}
+                      <p
+                        className="
+                            pt-1
+                            text-sm
+                            leading-7
+                            text-zinc-400
+                            sm:text-[15px]
+                            sm:leading-8
+                          "
+                      >
+                        {moment}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Final realisation */}
+                {finished && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 20,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    transition={{
+                      duration: 0.9,
+                    }}
+                    className="
+                      relative
+                      mt-9
+                      overflow-hidden
+                      rounded-[1.5rem]
+                      border
+                      border-rose-300/15
+                      bg-gradient-to-br
+                      from-rose-500/[0.09]
+                      via-rose-400/[0.04]
+                      to-transparent
+                      px-5
+                      py-8
+                      text-center
+                      sm:px-8
+                    "
+                  >
+                    {/* Glow */}
+                    <div
+                      className="
+                        pointer-events-none
+                        absolute
+                        left-1/2
+                        top-0
+                        h-32
+                        w-64
+                        -translate-x-1/2
+                        rounded-full
+                        bg-rose-400/[0.08]
+                        blur-3xl
+                      "
+                    />
+
+                    <div className="relative">
+                      <motion.div
+                        animate={{
+                          scale: [1, 1.08, 1],
+                        }}
+                        transition={{
+                          duration: 2.5,
+                          repeat: Infinity,
+                        }}
+                        className="
+                          mx-auto
+                          flex
+                          h-9
+                          w-9
+                          items-center
+                          justify-center
+                          rounded-full
+                          bg-rose-400/10
+                        "
+                      >
+                        <Check size={17} className="text-rose-300" />
+                      </motion.div>
+
+                      <p
+                        className="
+                          mt-5
+                          text-lg
+                          font-medium
+                          leading-8
+                          text-zinc-100
+                          sm:text-xl
+                        "
+                      >
+                        It wasn&apos;t you.
+                        <br />
+                        <span className="text-rose-300">
+                          It wasn&apos;t your pictures.
+                        </span>
+                      </p>
+
+                      <div className="mx-auto mt-4 h-px w-12 bg-rose-400/20" />
+
+                      <p
+                        className="
+                          mt-4
+                          text-sm
+                          leading-7
+                          text-zinc-500
+                        "
+                      >
+                        It was the way I chose
+                        <br className="sm:hidden" />
+                        to express myself.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </div>
           </motion.div>
 
-          {/* Continue */}
+          {/* ================================================= */}
+          {/* CONTINUE */}
+          {/* ================================================= */}
+
           {finished && (
             <motion.div
               initial={{
@@ -334,10 +644,10 @@ export default function Terminal({ onNext }: Props) {
                 y: 0,
               }}
               transition={{
-                duration: 0.7,
+                duration: 0.8,
                 delay: 0.3,
               }}
-              className="mt-10"
+              className="mt-10 text-center"
             >
               <p
                 className="
@@ -362,7 +672,7 @@ export default function Terminal({ onNext }: Props) {
                   mt-5
                   text-[10px]
                   uppercase
-                  tracking-[0.25em]
+                  tracking-[0.3em]
                   text-zinc-700
                 "
               >
@@ -371,14 +681,14 @@ export default function Terminal({ onNext }: Props) {
             </motion.div>
           )}
 
-          {/* Names */}
+          {/* Footer */}
           <p
             className="
               mt-10
+              text-center
               text-[10px]
-              uppercase
               tracking-[0.25em]
-              text-zinc-700
+              text-zinc-800
             "
           >
             {SITE.yourName} · {SITE.herName}
